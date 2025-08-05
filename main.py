@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 # !! خطوة مهمة !!
 # قم باستضافة ملف index.html وانسخ الرابط العام هنا.
 # ==============================================================================
-WEB_APP_URL = "darkcyan-manatee-795600.hostingersite.com"
+WEB_APP_URL = "https://darkcyan-manatee-795600.hostingersite.com"
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
