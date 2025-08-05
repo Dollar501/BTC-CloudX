@@ -82,7 +82,6 @@ async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     
     key = query.data  # This will be 'how_it_works' or 'privacy_policy'
     
-    # *** FIX: Fetch the text directly from the STATIC_MESSAGES dictionary ***
     text = STATIC_MESSAGES.get(key, "عذراً، المحتوى المطلوب غير موجود.")
     
     keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
@@ -99,11 +98,16 @@ async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE
     for plan in INVESTMENT_PLANS:
         response += (
             f"*{plan['name']}*\n"
-            f"*- {get_text('price', context)}:* ${plan['price']}\n"
-            f"*- {get_text('hashrate', context)}:* {plan['hashrate']} TH/s\n"
-            f"*- {get_text('annual_profit', context)}:* ~${plan['annual_profit']:.2f}\n"
-            f"--------------------\n"
+            f"💰 *{get_text('investment_amount', context)}:* ${plan['price']}\n"
+            f"⚙️ *{get_text('hashrate', context)}:* {plan['hashrate']} TH/s\n"
+            f"🔌 *{get_text('device_source', context)}:* {plan['device_source']}\n"
+            f"📈 *{get_text('daily_profit', context)}:* ~${plan['daily_profit']:.2f}\n"
+            f"📅 *{get_text('annual_profit', context)}:* ~${plan['annual_profit']:.2f}\n"
         )
+        if 'semi_annual_bonus' in plan and plan['semi_annual_bonus'] > 0:
+            response += f"🎁 *{get_text('semi_annual_bonus', context)}:* ${plan['semi_annual_bonus']:.2f}\n"
+        
+        response += "--------------------\n"
     
     keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
     reply_markup = InlineKeyboardMarkup(keyboard)

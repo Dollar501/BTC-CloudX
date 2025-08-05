@@ -7,33 +7,34 @@ MINING_HARDWARE = [
         'id': 's21xp_hydro',
         'name': 'Antminer S21 XP Hydro',
         'efficiency': '12.0 J/TH',
-        'image': 'path/to/s21_hydro.jpg' # Placeholder path
+        'image': 'img/antminer_s21xp_hydro.jpg'
     },
     {
         'id': 's21xp',
         'name': 'Antminer S21 XP',
         'efficiency': '13.5 J/TH',
-        'image': 'path/to/s21_xp.jpg'
+        'image': 'img/Antminer_S21_XP_270TH.jpg'
     },
     {
         'id': 'm66s',
         'name': 'WhatsMiner M66S++',
         'efficiency': '14.0 J/TH',
-        'image': 'path/to/m66s.jpg'
+        'image': 'img/WhatsMiner_M66S++.jpg'
     }
 ]
 
-# New, detailed investment plans based on your formula
+# Updated investment plans with semi-annual bonus
 INVESTMENT_PLANS = [
     {
-         'name': 'العقد الاحترافي (Pro)',
+        'name': 'العقد الاحترافي (Pro)',
         'price': Decimal('200'),
         'duration_months': 12,
         'hashrate': Decimal('10'),
         'device_source': 'Antminer S21 XP',
-        'daily_profit': Decimal('0.4075'),
+        'daily_profit': Decimal('0.41'),
         'monthly_profit': Decimal('12.22'),
         'annual_profit': Decimal('148.73'),
+        'semi_annual_bonus': Decimal('50.00')  # 25% of 200
     },
     {
         'name': 'العقد المتقدم (Advanced)',
@@ -41,10 +42,10 @@ INVESTMENT_PLANS = [
         'duration_months': 12,
         'hashrate': Decimal('26'),
         'device_source': 'Antminer S21 XP',
-        'daily_profit': Decimal('1.0595'),
+        'daily_profit': Decimal('1.06'),
         'monthly_profit': Decimal('31.78'),
         'annual_profit': Decimal('386.71'),
-        'semi_annual_bonus': Decimal('125.00')  # 25% من 500
+        'semi_annual_bonus': Decimal('125.00')  # 25% of 500
     },
     {
         'name': 'عقد النخبة المائي (Elite Hydro)',
@@ -52,10 +53,10 @@ INVESTMENT_PLANS = [
         'duration_months': 12,
         'hashrate': Decimal('55'),
         'device_source': 'Antminer S21 XP Hydro',
-        'daily_profit': Decimal('2.406'),
+        'daily_profit': Decimal('2.41'),
         'monthly_profit': Decimal('72.18'),
         'annual_profit': Decimal('878.19'),
-        'semi_annual_bonus': Decimal('250.00')  # 25% من 1000
+        'semi_annual_bonus': Decimal('250.00')  # 25% of 1000
     }
 ]
 
