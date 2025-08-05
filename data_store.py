@@ -26,14 +26,15 @@ MINING_HARDWARE = [
 # New, detailed investment plans based on your formula
 INVESTMENT_PLANS = [
     {
-        'name': 'العقد الاحترافي (Pro)',
+         'name': 'العقد الاحترافي (Pro)',
         'price': Decimal('200'),
         'duration_months': 12,
         'hashrate': Decimal('10'),
         'device_source': 'Antminer S21 XP',
         'daily_profit': Decimal('0.4075'),
         'monthly_profit': Decimal('12.22'),
-        'annual_profit': Decimal('148.73')
+        'annual_profit': Decimal('148.73'),
+        'semi_annual_bonus': Decimal('50.00')  # 25% من 200
     },
     {
         'name': 'العقد المتقدم (Advanced)',
@@ -43,7 +44,8 @@ INVESTMENT_PLANS = [
         'device_source': 'Antminer S21 XP',
         'daily_profit': Decimal('1.0595'),
         'monthly_profit': Decimal('31.78'),
-        'annual_profit': Decimal('386.71')
+        'annual_profit': Decimal('386.71'),
+        'semi_annual_bonus': Decimal('125.00')  # 25% من 500
     },
     {
         'name': 'عقد النخبة المائي (Elite Hydro)',
@@ -53,7 +55,8 @@ INVESTMENT_PLANS = [
         'device_source': 'Antminer S21 XP Hydro',
         'daily_profit': Decimal('2.406'),
         'monthly_profit': Decimal('72.18'),
-        'annual_profit': Decimal('878.19')
+        'annual_profit': Decimal('878.19'),
+        'semi_annual_bonus': Decimal('250.00')  # 25% من 1000
     }
 ]
 
@@ -67,8 +70,7 @@ FAQ_DATA = [
 
 # Static informational messages
 STATIC_MESSAGES = {
-    'how_it_works': """
-*⚙️ طبيعة عملنا في BTC-CloudX*
+    'how_it_works': """*⚙️ طبيعة عملنا في BTC-CloudX*
 
 ببساطة، أنت لا تشتري جهاز تعدين مادي وتضعه في منزلك، بل تستثمر في قوة الحوسبة (المعروفة باسم Hashrate) التي تنتجها أجهزتنا المتطورة في مزارع التعدين الخاصة بنا.
 

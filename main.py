@@ -192,7 +192,7 @@ async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         
         if data.get('action') == 'create_custom_plan':
             payload = data['payload']
-            
+
             response = (
                 f"*{get_text('custom_plan_result_title', context)}*\n"
                 "-----------------------------------\n"
