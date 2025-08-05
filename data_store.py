@@ -34,7 +34,6 @@ INVESTMENT_PLANS = [
         'daily_profit': Decimal('0.4075'),
         'monthly_profit': Decimal('12.22'),
         'annual_profit': Decimal('148.73'),
-        'semi_annual_bonus': Decimal('50.00')  # 25% من 200
     },
     {
         'name': 'العقد المتقدم (Advanced)',
