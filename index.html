@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BTC-CloudX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #18222d;
+            --tg-theme-text-color: #ffffff;
+            --tg-theme-hint-color: #b1c3d5;
+            --tg-theme-link-color: #62bcf9;
+            --tg-theme-button-color: #3c9de0;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #232e3c;
+        }
+        body {
+            background-color: var(--tg-theme-bg-color);
+            /* NEW: Background Image */
+            background-image: url('https://i.imgur.com/your-background-image.jpg'); /* استبدل برابط صورتك */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--tg-theme-text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+        .page { display: none; animation: fadeIn 0.3s; }
+        .page.active { display: block; }
+        .bottom-nav {
+            background-color: rgba(35, 46, 60, 0.85); /* Semi-transparent background */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(177, 195, 213, 0.3);
+        }
+        .nav-btn.active { color: var(--tg-theme-button-color); }
+        .card {
+            background-color: rgba(35, 46, 60, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(177, 195, 213, 0.2);
+        }
+        .form-input, .form-select {
+            background-color: var(--tg-theme-secondary-bg-color);
+            border: 1px solid var(--tg-theme-hint-color);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="p-4 space-y-4">
+        <section id="home-page" class="page active text-center">
+            <div class="card p-6 rounded-xl">
+                <h1 class="text-3xl font-bold">أهلاً بك في BTC-CloudX</h1>
+                <p class="text-lg text-gray-300 mt-2">بوابتك الآمنة للاستثمار في التعدين السحابي. استخدم القائمة بالأسفل للتنقل بين خدماتنا.</p>
+            </div>
+        </section>
+
+        <section id="hardware-page" class="page space-y-4">
+            <h1 class="text-2xl font-bold">📠 أجهزتنا في المزرعة</h1>
+            <div id="hardware-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </div>
+        </section>
+
+        <section id="plans-page" class="page space-y-4">
+            <h1 class="text-2xl font-bold">📊 الخطط السنوية المميزة</h1>
+            <div id="plans-container" class="space-y-4">
+                </div>
+        </section>
+
+        <section id="create-plan-page" class="page space-y-6">
+            <h1 class="text-2xl font-bold">💡 إنشاء خطة مخصصة</h1>
+            <div class="card p-6 rounded-xl space-y-6">
+                <div>
+                    <label for="investment_amount" class="block mb-2 font-medium">1. حدد مبلغ الاستثمار (بالدولار)</label>
+                    <input type="number" id="investment_amount" class="form-input block w-full p-2.5 rounded-lg text-center text-lg" placeholder="مثال: 1500" min="100">
+                </div>
+                <div>
+                    <label for="investment_duration" class="block mb-2 font-medium">2. حدد مدة الاستثمار</label>
+                    <input type="range" id="investment_duration" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer" min="1" max="3" value="1">
+                    <div class="flex justify-between text-xs px-1 mt-1">
+                        <span>سنة واحدة</span>
+                        <span>سنتان</span>
+                        <span>3 سنوات</span>
+                    </div>
+                    <p class="text-center font-bold text-xl mt-2">المدة المحددة: <span id="duration_display">1</span> سنة</p>
+                </div>
+                <div id="calculation-result" class="text-center bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-lg space-y-2" style="display: none;">
+                    <h3 class="font-bold">النتائج التقديرية لخطتك:</h3>
+                    <p>قوة تعدينية: <span id="result-hashrate" class="font-bold text-green-400"></span></p>
+                    <p>صافي الربح السنوي: <span id="result-profit" class="font-bold text-green-400"></span></p>
+                </div>
+                <button id="submit-plan-btn" class="w-full text-white p-3 rounded-lg font-bold" style="background-color: var(--tg-theme-button-color);">احتساب وإرسال تفاصيل الخطة للبوت</button>
+            </div>
+        </section>
+        
+        <section id="faq-page" class="page space-y-4">
+            <h1 class="text-2xl font-bold">❓ أسئلة شائعة</h1>
+            <div id="faq-container" class="space-y-3">
+                </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav fixed bottom-0 left-0 right-0 flex justify-around p-2">
+        <button data-page="home-page" class="nav-btn active flex flex-col items-center w-full"><span class="text-2xl">🏠</span><span class="text-xs">الرئيسية</span></button>
+        <button data-page="hardware-page" class="nav-btn flex flex-col items-center w-full"><span class="text-2xl">📠</span><span class="text-xs">الأجهزة</span></button>
+        <button data-page="plans-page" class="nav-btn flex flex-col items-center w-full"><span class="text-2xl">📊</span><span class="text-xs">الخطط</span></button>
+        <button data-page="create-plan-page" class="nav-btn flex flex-col items-center w-full"><span class="text-2xl">💡</span><span class="text-xs">خطة خاصة</span></button>
+        <button data-page="faq-page" class="nav-btn flex flex-col items-center w-full"><span class="text-2xl">❓</span><span class="text-xs">الأسئلة</span></button>
+    </nav>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // --- DATA (This should ideally be fetched from your backend, but we mirror data_store.py) ---
+        const MINING_HARDWARE = [
+            { 'id': 's21_xp', 'name': 'Antminer S21 XP', 'hashrate': 270, 'efficiency': 13.5, 'image': 'https://i.imgur.com/Oq10n4f.png', 'description': 'أفضل جهاز تبريد هوائي في فئته، يجمع بين القوة والكفاءة العالية.'},
+            { 'id': 'm66s_plus', 'name': 'WhatsMiner M66S++', 'hashrate': 348, 'efficiency': 15.5, 'image': 'https://i.imgur.com/u15gKgs.png', 'description': 'جهاز قوي وموثوق يعمل بنظام التبريد بالغطس، مصمم للعمليات الصناعية الكبيرة.'},
+            { 'id': 's21_hydro', 'name': 'Antminer S21 XP Hydro', 'hashrate': 473, 'efficiency': 12.0, 'image': 'https://i.imgur.com/E8w9eJ1.png', 'description': 'الجهاز الأكثر كفاءة في العالم، يعمل بنظام تبريد مائي متقدم لتحقيق أقصى أداء وهدوء.'}
+        ];
+        
+        const ANNUAL_PLANS = [
+            { 'id': 'pro_200', 'name': 'العقد الاحترافي', 'price': 200, 'hashrate': 10, 'daily_fee_usd': 0.38 },
+            { 'id': 'advanced_500', 'name': 'العقد المتقدم', 'price': 500, 'hashrate': 26, 'daily_fee_usd': 0.988 },
+            { 'id': 'elite_1000', 'name': 'العقد المائي للنخبة', 'price': 1000, 'hashrate': 55, 'daily_fee_usd': 1.925 }
+        ];
+
+        const FAQ_DATA = {
+            'faq_1': { 'q': 'ما هي طبيعة الاستثمار معكم؟' },
+            'faq_2': { 'q': 'هل الأرباح ثابتة ومضمونة؟' },
+            'faq_3': { 'q': 'كيف أضمن حقوقي عند الاستثمار؟' },
+            'faq_4': { 'q': 'ماذا يحدث بعد انتهاء مدة العقد؟' }
+        };
+
+        const BTC_PRICE_USD = 75000.0;
+        const BTC_PER_TH_PER_DAY = 0.00000105;
+
+        // --- PAGE NAVIGATION ---
+        const pages = document.querySelectorAll('.page');
+        const navButtons = document.querySelectorAll('.nav-btn');
+        function showPage(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+            tg.HapticFeedback.impactOccurred('light');
+        }
+        navButtons.forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)));
+
+        // --- RENDER FUNCTIONS ---
+        function renderHardwarePage() {
+            const container = document.getElementById('hardware-container');
+            container.innerHTML = '';
+            MINING_HARDWARE.forEach(device => {
+                const card = document.createElement('div');
+                card.className = 'card p-4 rounded-lg cursor-pointer';
+                card.innerHTML = `
+                    <img src="${device.image}" alt="${device.name}" class="rounded-md w-full mb-2">
+                    <h2 class="text-xl font-bold">${device.name}</h2>
+                    <p class="text-sm text-gray-300 mt-1">${device.description}</p>
+                    <div class="text-xs mt-2 grid grid-cols-2 gap-x-2">
+                        <p>القوة: <span class="font-semibold">${device.hashrate} TH/s</span></p>
+                        <p>الكفاءة: <span class="font-semibold">${device.efficiency} J/TH</span></p>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    tg.sendData(JSON.stringify({ action: 'show_device_image', payload: { device_id: device.id } }));
+                });
+                container.appendChild(card);
+            });
+        }
+
+        function renderPlansPage() {
+            const container = document.getElementById('plans-container');
+            container.innerHTML = '';
+            ANNUAL_PLANS.forEach(plan => {
+                const dailyGrossProfit = plan.hashrate * BTC_PER_TH_PER_DAY * BTC_PRICE_USD;
+                const dailyNetProfit = dailyGrossProfit - plan.daily_fee_usd;
+                const annualNetProfit = dailyNetProfit * 365;
+                const card = `
+                    <div class="card p-4 rounded-lg">
+                        <h2 class="text-xl font-bold">${plan.name}</h2>
+                        <div class="my-2 border-t border-gray-600"></div>
+                        <p><strong>السعر:</strong> ${plan.price}$</p>
+                        <p><strong>القوة:</strong> ${plan.hashrate} TH/s</p>
+                        <p><strong>الرسوم اليومية:</strong> ${plan.daily_fee_usd.toFixed(2)}$</p>
+                        <div class="my-2 border-t border-gray-600"></div>
+                        <p class="text-green-400"><strong>الربح السنوي التقديري:</strong> ~$${annualNetProfit.toFixed(2)}</p>
+                    </div>`;
+                container.innerHTML += card;
+            });
+        }
+
+        function renderFaqPage() {
+            const container = document.getElementById('faq-container');
+            container.innerHTML = '';
+            Object.keys(FAQ_DATA).forEach(key => {
+                const item = FAQ_DATA[key];
+                const button = document.createElement('button');
+                button.className = 'card p-4 rounded-lg w-full text-right font-bold';
+                button.textContent = item.q;
+                button.addEventListener('click', () => {
+                    tg.sendData(JSON.stringify({ action: 'show_faq_answer', payload: { faq_id: key } }));
+                });
+                container.appendChild(button);
+            });
+        }
+
+        // --- CUSTOM PLAN LOGIC ---
+        const amountInput = document.getElementById('investment_amount');
+        const durationInput = document.getElementById('investment_duration');
+        const durationDisplay = document.getElementById('duration_display');
+        const resultDiv = document.getElementById('calculation-result');
+        const resultHashrate = document.getElementById('result-hashrate');
+        const resultProfit = document.getElementById('result-profit');
+        
+        function updateDurationDisplay() {
+            durationDisplay.textContent = durationInput.value;
+        }
+        durationInput.addEventListener('input', updateDurationDisplay);
+
+        document.getElementById('submit-plan-btn').addEventListener('click', () => {
+            const amount = parseFloat(amountInput.value);
+            const durationYears = parseInt(durationInput.value);
+
+            if (isNaN(amount) || amount < 100) {
+                tg.showAlert('الرجاء إدخال مبلغ استثمار صالح (100 دولار أو أكثر).');
+                return;
+            }
+
+            // --- The Core Calculation Equation ---
+            // 1. Define the cost to acquire 1 TH/s for a 1-year contract. 
+            // Based on our plans ($200 for 10 TH/s = $20/TH, $500 for 26 TH/s = ~$19.2/TH, $1000 for 55 TH/s = ~$18.2/TH)
+            // Let's take an average cost of $19 per TH/s for a yearly contract.
+            const costPerThYearly = 19.0;
+            
+            // 2. Calculate hashrate user gets.
+            const hashrate = amount / costPerThYearly;
+
+            // 3. Define daily fee per TH/s. Based on our plans, it's around $0.035-$0.038. Let's use an average.
+            const feePerThDaily = 0.037;
+
+            // 4. Calculate profits.
+            const dailyGrossProfit = hashrate * BTC_PER_TH_PER_DAY * BTC_PRICE_USD;
+            const totalDailyFee = hashrate * feePerThDaily;
+            const dailyNetProfit = dailyGrossProfit - totalDailyFee;
+            const totalNetProfit = dailyNetProfit * 365 * durationYears;
+
+            // Display results in the app
+            resultHashrate.textContent = `${hashrate.toFixed(2)} TH/s`;
+            resultProfit.textContent = `~$${totalNetProfit.toFixed(2)} (لمدة ${durationYears} سنوات)`;
+            resultDiv.style.display = 'block';
+
+            // Send data to the bot
+            tg.sendData(JSON.stringify({
+                action: 'confirm_custom_plan',
+                payload: {
+                    amount: amount,
+                    duration: durationYears,
+                    hashrate: hashrate.toFixed(2),
+                    total_profit: totalNetProfit.toFixed(2)
+                }
+            }));
+            
+            tg.HapticFeedback.notificationOccurred('success');
+        });
+
+        // --- INITIALIZE APP ---
+        renderHardwarePage();
+        renderPlansPage();
+        renderFaqPage();
+        showPage('home-page');
+    </script>
+</body>
+</html>
