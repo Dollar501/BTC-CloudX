@@ -74,13 +74,16 @@ async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 # --- Callback Query Handlers for Bot Menu ---
 
+
 async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Displays a static message like 'How it Works' or 'Privacy'."""
     query = update.callback_query
     await query.answer()
     
-    key = query.data 
-    text = get_text(key, context)
+    key = query.data  # This will be 'how_it_works' or 'privacy_policy'
+    
+    # *** FIX: Fetch the text directly from the STATIC_MESSAGES dictionary ***
+    text = STATIC_MESSAGES.get(key, "عذراً، المحتوى المطلوب غير موجود.")
     
     keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -202,7 +205,6 @@ async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             )
             
             keyboard = [
-                # THIS LINE IS NOW FIXED
                 [InlineKeyboardButton(get_text('contact_support_button', context), url=os.getenv("TELEGRAM_SUPPORT_URL"))],
                 [InlineKeyboardButton(get_text('close_message_button', context), callback_data='delete_message')]
             ]
