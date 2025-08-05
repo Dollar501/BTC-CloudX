@@ -2,270 +2,254 @@
 import logging
 import os
 import json
-import random
-import string
-from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
+import hashlib
+from decimal import Decimal
 
-# Import data and text strings
-from data_store import MINING_HARDWARE, ANNUAL_PLANS, FAQ_DATA, BTC_PRICE_USD, BTC_PER_TH_PER_DAY
-from localization import get_text
+from dotenv import load_dotenv
+from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from telegram.ext import (
+    Application, CommandHandler, MessageHandler, filters, ContextTypes,
+    CallbackQueryHandler
+)
 
-# --- Configuration ---
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+# Import bot modules
+from localization import get_text, set_language_and_reply, build_language_menu
+from data_store import MINING_HARDWARE, INVESTMENT_PLANS, FAQ_DATA, STATIC_MESSAGES
+from helpers import build_main_menu
+
+# Load environment variables
+load_dotenv()
+
+# Setup logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
-# IMPORTANT: Replace with your actual Web App URL
-WEB_APP_URL = "https://darkcyan-manatee-795600.hostingersite.com/" 
-# IMPORTANT: Replace with your actual Telegram Channel and Support links
-TELEGRAM_CHANNEL_LINK = "https://t.me/BTCCloudX"
-TELEGRAM_SUPPORT_LINK = "https://t.me/BTC_CloudX"
+# Get Web App URL from environment variables
+WEB_APP_URL = os.getenv("WEB_APP_URL", "https://your-app-url.com")
 
 
-# --- Helper Functions ---
-def get_user_lang(context: ContextTypes.DEFAULT_TYPE) -> str:
-    """Gets user's language, defaults to Arabic."""
-    return context.user_data.get('lang', 'ar')
+# --- Command Handlers ---
 
-
-# --- Main Menu Builder ---
-def build_main_menu(lang: str) -> InlineKeyboardMarkup:
-    """Builds the main menu with the new structure."""
-    keyboard = [
-        [InlineKeyboardButton(get_text('our_mission_button', lang), callback_data='show_our_mission')],
-        [InlineKeyboardButton(get_text('featured_plans_button', lang), callback_data='show_featured_plans')],
-        [InlineKeyboardButton(get_text('custom_plan_button', lang), web_app=WebAppInfo(url=WEB_APP_URL + "?page=create-plan-page"))],
-        [
-            InlineKeyboardButton(get_text('contact_us_button', lang), callback_data='show_contact_us'),
-            InlineKeyboardButton(get_text('faq_button', lang), callback_data='show_faq')
-        ],
-        [
-            InlineKeyboardButton(get_text('privacy_button', lang), callback_data='show_privacy'),
-            InlineKeyboardButton(get_text('get_id_button', lang), callback_data='get_user_id')
-        ],
-        [
-            InlineKeyboardButton(get_text('language_button', lang), callback_data='select_language'),
-            InlineKeyboardButton(get_text('open_app_button', lang), web_app=WebAppInfo(url=WEB_APP_URL))
-        ]
-    ]
-    return InlineKeyboardMarkup(keyboard)
-
-# --- Command Handlers (START) ---
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles the /start command and displays the main menu."""
+    user = update.effective_user
     context.user_data.setdefault('lang', 'ar')
-    lang = get_user_lang(context)
     
-    welcome_message = get_text('welcome_message', lang)
-    reply_markup = build_main_menu(lang)
+    welcome_message = get_text('welcome', context).format(user_mention=user.mention_html())
     
-    if update.callback_query:
-        await update.callback_query.answer()
-        await update.callback_query.edit_message_text(
-            text=welcome_message,
-            reply_markup=reply_markup,
-            parse_mode='Markdown'
-        )
-    else:
-        await update.message.reply_markdown(
-            welcome_message,
-            reply_markup=reply_markup
-        )
-
-# --- Callback Query Handlers (Bot Buttons) ---
-async def show_our_mission(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    await query.answer()
-    lang = get_user_lang(context)
-    text = f"{get_text('our_mission_title', lang)}\n\n{get_text('our_mission_content', lang)}"
-    keyboard = [[InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')]]
-    await query.edit_message_text(text=text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
-
-async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    await query.answer()
-    lang = get_user_lang(context)
-    
-    # Calculate estimated profits for display
-    response_text = f"{get_text('featured_plans_title', lang)}\n\n{get_text('featured_plans_intro', lang)}\n"
-    response_text += "-----------------------------------\n\n"
-
-    for plan in ANNUAL_PLANS:
-        daily_gross_profit = plan['hashrate'] * BTC_PER_TH_PER_DAY * BTC_PRICE_USD
-        daily_net_profit = daily_gross_profit - plan['daily_fee_usd']
-        annual_net_profit = daily_net_profit * 365
-
-        response_text += f"*{plan['name']}*\n"
-        response_text += f"*{get_text('plan_price', lang)}:* ${plan['price']}\n"
-        response_text += f"*{get_text('plan_hashrate', lang)}:* {plan['hashrate']} TH/s\n"
-        response_text += f"*{get_text('plan_annual_profit', lang)}:* ~${annual_net_profit:,.2f}\n"
-        response_text += "-----------------------------------\n"
-    
-    response_text += get_text('profit_warning', lang)
-    
-    keyboard = [[InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')]]
-    await query.edit_message_text(text=response_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
-
-async def show_contact_us(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    await query.answer()
-    lang = get_user_lang(context)
-    text = f"{get_text('contact_us_title', lang)}\n\n{get_text('contact_us_content', lang)}"
+    # The button to open the Web App
     keyboard = [
-        [InlineKeyboardButton(get_text('join_channel_button', lang), url=TELEGRAM_CHANNEL_LINK)],
-        [InlineKeyboardButton(get_text('contact_support_button', lang), url=TELEGRAM_SUPPORT_LINK)],
-        [InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')]
+        [InlineKeyboardButton(
+            get_text("open_app_button", context),
+            web_app=WebAppInfo(url=WEB_APP_URL)
+        )],
+        [InlineKeyboardButton(
+            get_text("bot_menu_button", context),
+            callback_data="main_menu"
+        )]
     ]
-    await query.edit_message_text(text=text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await update.message.reply_html(welcome_message, reply_markup=reply_markup)
 
-async def show_faq(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays the main menu of the bot."""
     query = update.callback_query
     await query.answer()
-    lang = get_user_lang(context)
-    keyboard = [
-        [InlineKeyboardButton(FAQ_DATA[key]['q'], callback_data=f"faq_{key}")] for key in FAQ_DATA
-    ]
-    keyboard.append([InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')])
+    
+    text = get_text('main_menu_title', context)
     await query.edit_message_text(
-        text=f"{get_text('faq_title', lang)}\n\n{get_text('faq_intro', lang)}",
-        reply_markup=InlineKeyboardMarkup(keyboard),
+        text=text,
+        reply_markup=build_main_menu(context),
         parse_mode='Markdown'
     )
-    
-async def show_faq_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+# --- Callback Query Handlers for Bot Menu ---
+
+async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays a static message like 'How it Works' or 'Privacy'."""
     query = update.callback_query
-    faq_key = query.data.split('faq_')[1]
-    lang = get_user_lang(context)
+    await query.answer()
     
-    question = FAQ_DATA[faq_key]['q']
-    answer = FAQ_DATA[faq_key]['a']
+    key = query.data # e.g., 'how_it_works', 'privacy_policy'
+    text = get_text(key, context)
+    
+    keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(text=text, reply_markup=reply_markup, parse_mode='Markdown')
+
+async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays the featured investment plans in the chat."""
+    query = update.callback_query
+    await query.answer()
+    
+    response = f"*{get_text('featured_plans_title', context)}*\n\n"
+    for plan in INVESTMENT_PLANS:
+        response += (
+            f"*{plan['name']}*\n"
+            f"*- {get_text('price', context)}:* ${plan['price']}\n"
+            f"*- {get_text('hashrate', context)}:* {plan['hashrate']} TH/s\n"
+            f"*- {get_text('annual_profit', context)}:* ~${plan['annual_profit']:.2f}\n"
+            f"--------------------\n"
+        )
+    
+    keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(text=response, reply_markup=reply_markup, parse_mode='Markdown')
+
+async def show_faq_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays the FAQ questions as buttons."""
+    query = update.callback_query
+    await query.answer()
+    
+    keyboard = []
+    for i, (q, a) in enumerate(FAQ_DATA):
+        keyboard.append([InlineKeyboardButton(q, callback_data=f"faq_{i}")])
+    
+    keyboard.append([InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")])
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(text=get_text('faq_title', context), reply_markup=reply_markup)
+
+async def show_faq_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays the answer to a selected FAQ."""
+    query = update.callback_query
+    await query.answer()
+    
+    faq_index = int(query.data.split('_')[1])
+    question, answer = FAQ_DATA[faq_index]
     
     text = f"❓ *{question}*\n\n{answer}"
-    keyboard = [[InlineKeyboardButton(get_text('back_button', lang), callback_data='show_faq')]]
     
-    await query.edit_message_text(text=text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
-
-async def show_privacy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    await query.answer()
-    lang = get_user_lang(context)
-    text = f"{get_text('privacy_title', lang)}\n\n{get_text('privacy_content', lang)}"
-    keyboard = [[InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')]]
-    await query.edit_message_text(text=text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
-
-async def get_user_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    await query.answer()
-    user = query.from_user
-    lang = get_user_lang(context)
-
-    # Check if user already has an ID
-    if 'user_btc_id' in context.user_data:
-        user_id_code = context.user_data['user_btc_id']
-    else:
-        # Generate a new persistent ID
-        random_part = ''.join(random.choices(string.digits, k=7))
-        user_id_code = f"BTC-77{random_part}"
-        context.user_data['user_btc_id'] = user_id_code
-
-    text = f"{get_text('get_id_title', lang)}\n\n{get_text('get_id_instructions', lang)}\n\n`{user_id_code}`"
-    keyboard = [[InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')]]
-    await query.edit_message_text(text=text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
+    keyboard = [[InlineKeyboardButton(get_text("back_to_faq_menu", context), callback_data="faq")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
     
-async def select_language(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await query.edit_message_text(text=text, reply_markup=reply_markup, parse_mode='Markdown')
+
+async def get_subscription_code(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Generates and shows a unique, persistent user subscription code."""
     query = update.callback_query
     await query.answer()
-    lang = get_user_lang(context)
+    user_id = str(update.effective_user.id)
+    
+    # Create a stable hash from the user ID
+    hasher = hashlib.sha256(user_id.encode('utf-8'))
+    # Take the first 7 digits of the hex digest
+    unique_part = hasher.hexdigest()[:7].upper()
+    
+    user_code = f"BTC-77-{unique_part}"
+    
+    text = get_text('subscription_code_text', context).format(user_code=user_code)
+    
+    keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(text=text, reply_markup=reply_markup, parse_mode='Markdown')
+
+async def show_contact_us(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays contact information and links."""
+    query = update.callback_query
+    await query.answer()
+    
+    text = get_text("contact_us_content", context)
+    
     keyboard = [
-        [InlineKeyboardButton("🇸🇦 العربية", callback_data="set_lang_ar")],
-        [InlineKeyboardButton("🇬🇧 English", callback_data="set_lang_en")],
-        [InlineKeyboardButton("🇨🇳 中文", callback_data="set_lang_zh")],
-        [InlineKeyboardButton(get_text('back_button', lang), callback_data='main_menu')]
+        [InlineKeyboardButton(get_text("join_channel_button", context), url=os.getenv("TELEGRAM_CHANNEL_URL"))],
+        [InlineKeyboardButton(get_text("contact_support_button", context), url=os.getenv("TELEGRAM_SUPPORT_URL"))],
+        [InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]
     ]
-    await query.edit_message_text(text=get_text('language_select_title', lang), reply_markup=InlineKeyboardMarkup(keyboard))
+    reply_markup = InlineKeyboardMarkup(keyboard)
     
-async def set_language(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    lang_code = query.data.split('set_lang_')[1]
-    context.user_data['lang'] = lang_code
-    await query.answer(get_text('language_updated_message', lang_code))
-    await start_command(update, context)
+    await query.edit_message_text(text=text, reply_markup=reply_markup, parse_mode='Markdown')
 
+async def language_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays the language selection menu."""
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_text(
+        text=get_text("select_language", context),
+        reply_markup=build_language_menu(context)
+    )
 
 # --- Web App Data Handler ---
+
 async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Receives and processes data from the Web App."""
+    """Receives data from the Web App and processes it."""
     try:
         data = json.loads(update.effective_message.web_app_data.data)
-        action = data.get('action')
-        payload = data.get('payload')
-        lang = get_user_lang(context)
-
-        if action == 'show_device_image':
-            device_id = payload['device_id']
-            device = next((d for d in MINING_HARDWARE if d['id'] == device_id), None)
-            if device:
-                caption = f"*{get_text('image_caption_for', lang)}: {device['name']}*\n\n{device['description']}"
-                await update.message.reply_photo(photo=device['image'], caption=caption, parse_mode='Markdown')
-
-        elif action == 'show_faq_answer':
-            faq_id = payload['faq_id']
-            faq_item = FAQ_DATA.get(faq_id)
-            if faq_item:
-                text = f"❓ *{faq_item['q']}*\n\n{faq_item['a']}"
-                await update.message.reply_markdown(text)
+        logger.info(f"Received web app data: {data}")
         
-        elif action == 'confirm_custom_plan':
-            text = (
-                f"{get_text('custom_plan_confirmation', lang)}\n"
+        if data.get('action') == 'create_custom_plan':
+            payload = data['payload']
+            
+            # Build the response message
+            response = (
+                f"*{get_text('custom_plan_result_title', context)}*\n"
                 "-----------------------------------\n"
-                f"*{get_text('custom_plan_amount', lang)}:* ${float(payload['amount']):,.2f}\n"
-                f"*{get_text('custom_plan_duration', lang)}:* {payload['duration']} سنة/سنوات\n"
-                f"*{get_text('custom_plan_hashrate_result', lang)}:* {payload['hashrate']} TH/s\n"
+                f"*{get_text('investment_amount', context)}:* ${payload['investment']}\n"
+                f"*{get_text('contract_duration', context)}:* {payload['duration']} سنوات\n"
+                f"*{get_text('calculated_hashrate', context)}:* {payload['hashrate']} TH/s\n"
+                f"*{get_text('total_profit_estimate', context)}:* ~${payload['totalProfit']}\n"
                 "-----------------------------------\n"
-                f"*{get_text('plan_annual_profit', lang)}:* ~${float(payload['total_profit']):,.2f} (لكامل المدة)\n\n"
-                f"{get_text('custom_plan_contact_prompt', lang)}"
+                f"{get_text('plan_request_prompt', context)}"
             )
-            keyboard = [[InlineKeyboardButton(get_text('contact_support_button', lang), url=TELEGRAM_SUPPORT_LINK)]]
-            await update.message.reply_markdown(text, reply_markup=InlineKeyboardMarkup(keyboard))
-
+            
+            # Ask the user if they want to contact support
+            keyboard = [
+                [InlineKeyboardButton(get_text('contact_support_button'), url=os.getenv("TELEGRAM_SUPPORT_URL"))],
+                [InlineKeyboardButton(get_text('close_message_button'), callback_data='delete_message')]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await update.message.reply_text(text=response, reply_markup=reply_markup, parse_mode='Markdown')
+            
     except (json.JSONDecodeError, KeyError) as e:
-        logger.error(f"Error processing Web App data: {e}")
-        await update.message.reply_text(get_text('error_message', get_user_lang(context)))
+        logger.error(f"Error processing web app data: {e}")
+        await update.message.reply_text("حدث خطأ أثناء معالجة طلبك من التطبيق.")
 
+async def delete_message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Deletes the message when the 'Close' button is pressed."""
+    query = update.callback_query
+    await query.answer()
+    await query.delete_message()
 
 def main() -> None:
     """Starts the bot."""
-    TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-    if not TELEGRAM_BOT_TOKEN:
-        logger.error("FATAL: TELEGRAM_BOT_TOKEN not found in .env or environment variables.")
+    BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+    if not BOT_TOKEN:
+        logger.error("FATAL: TELEGRAM_BOT_TOKEN not found in .env file.")
         return
-    if "your-actual-web-app-url" in WEB_APP_URL:
-        logger.warning("Warning: WEB_APP_URL has not been set in main.py. The Web App will not work correctly.")
+    if "your-app-url.com" in WEB_APP_URL:
+        logger.warning("Warning: WEB_APP_URL is not set in .env file. The Web App will not work.")
 
-    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    application = Application.builder().token(BOT_TOKEN).build()
 
-    # --- Register handlers ---
+    # --- Register Handlers ---
+    # Commands
     application.add_handler(CommandHandler("start", start_command))
-    application.add_handler(CallbackQueryHandler(start_command, pattern='^main_menu$'))
-    
-    # Bot menu buttons
-    application.add_handler(CallbackQueryHandler(show_our_mission, pattern='^show_our_mission$'))
-    application.add_handler(CallbackQueryHandler(show_featured_plans, pattern='^show_featured_plans$'))
-    application.add_handler(CallbackQueryHandler(show_contact_us, pattern='^show_contact_us$'))
-    application.add_handler(CallbackQueryHandler(show_faq, pattern='^show_faq$'))
-    application.add_handler(CallbackQueryHandler(show_privacy, pattern='^show_privacy$'))
-    application.add_handler(CallbackQueryHandler(get_user_id, pattern='^get_user_id$'))
-    
-    # FAQ answer handler
-    application.add_handler(CallbackQueryHandler(show_faq_answer, pattern='^faq_'))
 
-    # Language handlers
-    application.add_handler(CallbackQueryHandler(select_language, pattern='^select_language$'))
-    application.add_handler(CallbackQueryHandler(set_language, pattern='^set_lang_'))
-
-    # Web App data handler
+    # Web App Data
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, web_app_data_handler))
+
+    # Callback Queries
+    application.add_handler(CallbackQueryHandler(main_menu_handler, pattern="^main_menu$"))
+    application.add_handler(CallbackQueryHandler(show_featured_plans, pattern="^featured_plans$"))
+    application.add_handler(CallbackQueryHandler(show_static_message, pattern="^(how_it_works|privacy_policy)$"))
+    application.add_handler(CallbackQueryHandler(show_faq_menu, pattern="^faq$"))
+    application.add_handler(CallbackQueryHandler(show_faq_answer, pattern="^faq_\d+$"))
+    application.add_handler(CallbackQueryHandler(get_subscription_code, pattern="^get_subscription_code$"))
+    application.add_handler(CallbackQueryHandler(show_contact_us, pattern="^contact_us$"))
+    application.add_handler(CallbackQueryHandler(language_menu_handler, pattern="^language$"))
+    application.add_handler(CallbackQueryHandler(set_language_and_reply, pattern="^set_lang_"))
+    application.add_handler(CallbackQueryHandler(delete_message_handler, pattern="^delete_message$"))
+    
+    # This handler opens the web app directly from a callback button
+    application.add_handler(CallbackQueryHandler(start_command, pattern="^open_webapp$"))
+
 
     logger.info("Bot is running...")
     application.run_polling()

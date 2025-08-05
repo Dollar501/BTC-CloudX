@@ -1,100 +1,106 @@
 # localization.py
-# This file handles all text strings and supports multiple languages.
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import ContextTypes
+
+# Add all bot text here for easy translation
 LANGUAGES = {
     'ar': {
-        # --- General ---
-        'back_button': '🔙 رجوع',
-        'app_title': 'BTC-CloudX | الاستثمار الذكي',
-        'error_message': 'حدث خطأ ما، يرجى المحاولة مرة أخرى.',
-
-        # --- Bot Menu Buttons ---
-        'our_mission_button': '📄 طبيعة عملنا',
-        'featured_plans_button': '📊 الخطط المميزة',
-        'custom_plan_button': '💡 إنشاء خطة مخصصة',
-        'contact_us_button': '📞 تواصل معنا',
-        'faq_button': '❓ أسئلة شائعة',
-        'privacy_button': '🛡️ الخصوصية والشفافية',
-        'get_id_button': '🆔 الحصول على كود الاشتراك',
-        'language_button': '🌐 اللغة',
-        'open_app_button': '📱 فتح التطبيق',
-
-        # --- Bot Content ---
-        'welcome_message': 'أهلاً بك في *BTC-CloudX*، بوابتك الآمنة للاستثمار في التعدين السحابي.\n\nاستخدم الأزرار أدناه لاستكشاف خدماتنا أو افتح التطبيق لتجربة تفاعلية كاملة.',
+        # General
+        "welcome": "أهلاً بك {user_mention} في *BTC-CloudX*!\n\nاستخدم الأزرار أدناه للبدء.",
+        "open_app_button": "🚀 فتح التطبيق الكامل",
+        "bot_menu_button": "⚙️ استخدام البوت مباشرة",
+        "main_menu_title": "القائمة الرئيسية للبوت. اختر أحد الخيارات:",
+        "back_to_main_menu": "🔙 العودة للقائمة الرئيسية",
+        "price": "السعر",
+        "hashrate": "القوة التعدينية",
+        "annual_profit": "الربح السنوي الصافي",
         
-        'our_mission_title': '📄 *طبيعة عملنا*',
-        'our_mission_content': (
-            "نحن في BTC-CloudX نؤمن بالشفافية الكاملة. ببساطة، نحن نمتلك وندير مزارع تعدين حقيقية مجهزة بأحدث وأقوى الأجهزة في العالم.\n\n"
-            "عندما تستثمر معنا، فأنت لا تشتري جهازًا افتراضيًا، بل تقوم بتأجير حصة من القوة التعدينية الحقيقية (Hashrate) لهذه الأجهزة.\n\n"
-            "*مهمتنا هي:* إزالة كل العوائق التقنية والتعقيدات عنك. لا داعي للقلق بشأن شراء الأجهزة، صيانتها، تبريدها، أو فواتير الكهرباء الباهظة. نحن نتولى كل ذلك، وأنت تحصل على ناتج التعدين الصافي من حصتك مباشرة إلى حسابك."
-        ),
+        # Main Menu Buttons
+        "featured_plans": "📊 الخطط المميزة",
+        "how_it_works": "⚙️ طبيعة عملنا",
+        "faq": "❓ أسئلة شائعة",
+        "privacy_policy": "📄 الخصوصية وسياسة العمل",
+        "get_subscription_code": "💳 الحصول على كود اشتراك",
+        "contact_us": "📞 تواصل معنا",
+        "language": "🌐 اللغة",
 
-        'featured_plans_title': '📊 *الخطط السنوية المميزة*',
-        'featured_plans_intro': 'هذه أفضل الخطط لدينا، مصممة بعناية لتوفر قيمة ممتازة على المدى الطويل. اختر الخطة التي تناسبك لترى تفاصيلها التقديرية.',
+        # Sections Content
+        "featured_plans_title": "الخطط الاستثمارية المميزة",
+        "how_it_works_text": "...", # Text is now in data_store.py
+        "privacy_policy_text": "...", # Text is now in data_store.py
+        "faq_title": "اختر سؤالاً لعرض إجابته:",
+        "back_to_faq_menu": "🔙 العودة لقائمة الأسئلة",
 
-        'plan_details_title': '📖 تفاصيل الخطة',
-        'plan_price': '💰 السعر',
-        'plan_duration': '⏳ المدة',
-        'plan_hashrate': '⚙️ القوة التعدينية',
-        'plan_source_device': 'Source Device', # Will be translated later
-        'plan_daily_fee': '💸 الرسوم اليومية',
-        'plan_estimated_profit_title': '📈 الأرباح التقديرية (حسب ظروف السوق الحالية)',
-        'plan_daily_profit': 'ربح اليوم',
-        'plan_monthly_profit': 'ربح الشهر',
-        'plan_annual_profit': 'ربح السنة',
-        'profit_warning': '⚠️ *هذه الأرقام تقديرية ومتغيرة وليست ضمانًا للأرباح.*',
-        'request_plan_button': '📞 طلب هذه الخطة',
+        # Subscription Code
+        "subscription_code_text": "✅ تم إنشاء كود الاشتراك الخاص بك بنجاح!\n\nالكود الخاص بك هو:\n`{user_code}`\n\nاحتفظ بهذا الكود، فهو معرّفك الدائم معنا.",
 
-        'custom_plan_intro': 'استخدم الواجهة التفاعلية لتصميم خطتك الخاصة بناءً على المبلغ والمدة التي تريدها.',
+        # Contact Us
+        "contact_us_content": "فريقنا جاهز للإجابة على جميع استفساراتك. يمكنك التواصل معنا عبر:",
+        "join_channel_button": "📢 قناتنا على تليجرام",
+        "contact_support_button": "💬 التحدث إلى الدعم الفني",
 
-        'contact_us_title': '📞 *تواصل معنا*',
-        'contact_us_content': (
-            "فريقنا جاهز دائمًا لمساعدتك.\n\n"
-            "🔹 **للاستفسارات العامة ومتابعة الأخبار:** انضم إلى قناتنا الرسمية.\n"
-            "🔹 **لطلب خطة استثمارية أو للدعم الفني:** تواصل مباشرة مع أحد خبرائنا."
-        ),
-        'join_channel_button': '📢 الانضمام للقناة',
-        'contact_support_button': '💬 التحدث إلى الدعم',
+        # Language
+        "select_language": "اختر لغتك المفضلة:",
+        "language_updated": "✅ تم تحديث اللغة إلى العربية.",
 
-        'faq_title': '❓ *أسئلة شائعة*',
-        'faq_intro': 'اختر سؤالاً من القائمة أدناه لعرض إجابته.',
-
-        'privacy_title': '🛡️ *الخصوصية، الشفافية، والضمانات*',
-        'privacy_content': (
-            "**1. الشفافية في الأرباح:** أرباحك هي ناتج التعدين الحقيقي لحصتك مطروحًا منه رسوم الكهرباء والصيانة. كل شيء واضح وبدون رسوم خفية.\n\n"
-            "**2. شهادة الاستثمار:** مع كل خطة، نصدر لك شهادة إلكترونية تحتوي على تفاصيل عقدك وكود الاشتراك الخاص بك (ID)، وهي بمثابة إثبات لحقوقك معنا.\n\n"
-            "**3. خصوصية بياناتك:** نحن لا نشارك بياناتك مع أي طرف ثالث. هويتك على تليجرام هي كل ما نحتاجه لربط الاستثمار بحسابك."
-        ),
-        
-        'get_id_title': '🆔 *كود الاشتراك الخاص بك*',
-        'get_id_instructions': 'هذا هو الكود الفريد الخاص بك. استخدمه عند التواصل مع الدعم لتعريف حسابك بسرعة.',
-        'your_id_is': 'الكود الخاص بك هو',
-
-        'language_select_title': '🌐 *اختر اللغة*',
-        'language_updated_message': 'تم تحديث اللغة بنجاح!',
-        
-        'custom_plan_confirmation': '✅ تم استلام طلبك لإنشاء خطة مخصصة بالتفاصيل التالية:',
-        'custom_plan_amount': '💵 مبلغ الاستثمار',
-        'custom_plan_duration': '⏳ مدة الاستثمار',
-        'custom_plan_hashrate_result': 'قوة تعدينية تقديرية',
-        'custom_plan_contact_prompt': 'هل تريد المتابعة وطلب هذه الخطة؟ اضغط على الزر أدناه للتواصل مع فريق الدعم.',
-
-        'image_caption_for': 'صورة لجهاز',
+        # Web App Data Handler
+        "custom_plan_result_title": "✅ تم استلام تفاصيل خطتك المخصصة",
+        "investment_amount": "مبلغ الاستثمار",
+        "contract_duration": "مدة العقد",
+        "calculated_hashrate": "القوة التعدينية المحسوبة",
+        "total_profit_estimate": "إجمالي الربح الصافي التقديري",
+        "plan_request_prompt": "لطلب هذه الخطة أو لمناقشة التفاصيل، يرجى التواصل مع الدعم الفني.",
+        "close_message_button": "✖️ إغلاق",
     },
     'en': {
-        # --- General ---
-        'back_button': '🔙 Back',
-        'app_title': 'BTC-CloudX | Smart Investment',
-        # ... All other keys would be translated here
+        # English translations would go here
+        "welcome": "Welcome {user_mention} to *BTC-CloudX*!\n\nUse the buttons below to get started.",
+        "open_app_button": "🚀 Open Full App",
+        "bot_menu_button": "⚙️ Use Bot Directly",
+        "language_updated": "✅ Language updated to English.",
+        # ... etc
     },
     'zh': {
-        # --- General ---
-        'back_button': '🔙 返回',
-        'app_title': 'BTC-CloudX | 智能投资',
-        # ... All other keys would be translated here
+        # Chinese translations would go here
+        "welcome": "欢迎 {user_mention}来到 *BTC-CloudX*！\n\n请使用下面的按钮开始。",
+        "open_app_button": "🚀 打开完整应用",
+        "bot_menu_button": "⚙️ 直接使用机器人",
+        "language_updated": "✅ 语言已更新为中文。",
+        # ... etc
     }
 }
 
-
-def get_text(key: str, lang: str) -> str:
+def get_text(key: str, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Fetches a text string in the user's selected language."""
-    return LANGUAGES.get(lang, LANGUAGES['ar']).get(key, f"_{key}_")
+    lang = context.user_data.get('lang', 'ar')
+    # Fallback to English if key not in selected language, then to key name
+    return LANGUAGES.get(lang, {}).get(key, LANGUAGES.get('en', {}).get(key, f"_{key}_"))
+
+def build_language_menu(context: ContextTypes.DEFAULT_TYPE) -> InlineKeyboardMarkup:
+    """Builds the language selection menu."""
+    keyboard = [
+        [
+            InlineKeyboardButton("🇸🇦 العربية", callback_data="set_lang_ar"),
+            InlineKeyboardButton("🇬🇧 English", callback_data="set_lang_en"),
+            InlineKeyboardButton("🇨🇳 中文", callback_data="set_lang_zh"),
+        ],
+        [InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+async def set_language_and_reply(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Sets the user's language and shows a confirmation."""
+    query = update.callback_query
+    lang_code = query.data.split('set_lang_')[1]
+    context.user_data['lang'] = lang_code
+    
+    # Use a direct lookup to ensure the confirmation is in the newly selected language
+    confirmation_text = LANGUAGES.get(lang_code, {}).get("language_updated", "Language updated.")
+    await query.answer(text=confirmation_text, show_alert=True)
+    
+    # Redisplay the main menu with the new language
+    from helpers import build_main_menu # Avoid circular import
+    await query.edit_message_text(
+        text=get_text('main_menu_title', context),
+        reply_markup=build_main_menu(context)
+    )
