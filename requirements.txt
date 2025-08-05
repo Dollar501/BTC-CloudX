@@ -1,0 +1,22 @@
+# ====================================================================
+# | Required Python packages for the BTC-CloudX Bot                  |
+# | These are necessary for running the bot on a server like Render. |
+# | Install using: pip install -r requirements.txt                   |
+# ====================================================================
+
+# The core library for interacting with the Telegram Bot API.
+# [job-queue] is included for scheduling tasks (e.g., daily reports).
+python-telegram-bot[job-queue]>=20.0
+
+# A micro web framework for Python. Required to run the bot as a
+# web service on Render, which is necessary for webhooks.
+Flask
+
+# A library for loading environment variables (like the bot token)
+# from a .env file. Best practice for security.
+python-dotenv
+
+# A library for accurate timezone calculations, often used with
+# the job queue for scheduling tasks in specific timezones.
+
+pytz
