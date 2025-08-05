@@ -27,7 +27,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Get Web App URL from environment variables
-WEB_APP_URL = os.getenv("WEB_APP_URL", "https://your-app-url.com")
+WEB_APP_URL = os.getenv("WEB_APP_URL", "https://darkcyan-manatee-795600.hostingersite.com/")
 
 
 # --- Command Handlers ---
@@ -202,8 +202,9 @@ async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             )
             
             keyboard = [
-                [InlineKeyboardButton(get_text('contact_support_button'), url=os.getenv("TELEGRAM_SUPPORT_URL"))],
-                [InlineKeyboardButton(get_text('close_message_button'), callback_data='delete_message')]
+                # THIS LINE IS NOW FIXED
+                [InlineKeyboardButton(get_text('contact_support_button', context), url=os.getenv("TELEGRAM_SUPPORT_URL"))],
+                [InlineKeyboardButton(get_text('close_message_button', context), callback_data='delete_message')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
