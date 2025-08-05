@@ -236,14 +236,14 @@ async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
 def main() -> None:
     """Starts the bot."""
-    BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-    if not BOT_TOKEN:
-        logger.error("FATAL: TELEGRAM_BOT_TOKEN not found in .env or environment variables.")
+    TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_TELEGRAM_BOT_TOKEN")
+    if not TELEGRAM_BOT_TOKEN:
+        logger.error("FATAL: TELEGRAM_TELEGRAM_BOT_TOKEN not found in .env or environment variables.")
         return
     if "your-actual-web-app-url" in WEB_APP_URL:
         logger.warning("Warning: WEB_APP_URL has not been set in main.py. The Web App will not work correctly.")
 
-    application = Application.builder().token(BOT_TOKEN).build()
+    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
     # --- Register handlers ---
     application.add_handler(CommandHandler("start", start_command))
