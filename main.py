@@ -16,10 +16,10 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # IMPORTANT: Replace with your actual Web App URL
-WEB_APP_URL = "https://your-actual-web-app-url.com" 
+WEB_APP_URL = "https://darkcyan-manatee-795600.hostingersite.com/" 
 # IMPORTANT: Replace with your actual Telegram Channel and Support links
-TELEGRAM_CHANNEL_LINK = "https://t.me/YOUR_CHANNEL"
-TELEGRAM_SUPPORT_LINK = "https://t.me/YOUR_SUPPORT_USERNAME"
+TELEGRAM_CHANNEL_LINK = "https://t.me/BTCCloudX"
+TELEGRAM_SUPPORT_LINK = "https://t.me/BTC_CloudX"
 
 
 # --- Helper Functions ---
