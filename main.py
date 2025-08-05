@@ -52,7 +52,13 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    await update.message.reply_html(welcome_message, reply_markup=reply_markup)
+    # Check if the update is from a callback query (like pressing 'open_webapp' button)
+    if update.callback_query:
+        await update.callback_query.message.reply_html(welcome_message, reply_markup=reply_markup)
+        await update.callback_query.answer() # Acknowledge the button press
+    else:
+        await update.message.reply_html(welcome_message, reply_markup=reply_markup)
+
 
 async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Displays the main menu of the bot."""
@@ -73,7 +79,7 @@ async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     query = update.callback_query
     await query.answer()
     
-    key = query.data # e.g., 'how_it_works', 'privacy_policy'
+    key = query.data 
     text = get_text(key, context)
     
     keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
@@ -136,9 +142,7 @@ async def get_subscription_code(update: Update, context: ContextTypes.DEFAULT_TY
     await query.answer()
     user_id = str(update.effective_user.id)
     
-    # Create a stable hash from the user ID
     hasher = hashlib.sha256(user_id.encode('utf-8'))
-    # Take the first 7 digits of the hex digest
     unique_part = hasher.hexdigest()[:7].upper()
     
     user_code = f"BTC-77-{unique_part}"
@@ -186,7 +190,6 @@ async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         if data.get('action') == 'create_custom_plan':
             payload = data['payload']
             
-            # Build the response message
             response = (
                 f"*{get_text('custom_plan_result_title', context)}*\n"
                 "-----------------------------------\n"
@@ -198,7 +201,6 @@ async def web_app_data_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 f"{get_text('plan_request_prompt', context)}"
             )
             
-            # Ask the user if they want to contact support
             keyboard = [
                 [InlineKeyboardButton(get_text('contact_support_button'), url=os.getenv("TELEGRAM_SUPPORT_URL"))],
                 [InlineKeyboardButton(get_text('close_message_button'), callback_data='delete_message')]
@@ -236,19 +238,18 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, web_app_data_handler))
 
     # Callback Queries
-    application.add_handler(CallbackQueryHandler(main_menu_handler, pattern="^main_menu$"))
-    application.add_handler(CallbackQueryHandler(show_featured_plans, pattern="^featured_plans$"))
-    application.add_handler(CallbackQueryHandler(show_static_message, pattern="^(how_it_works|privacy_policy)$"))
-    application.add_handler(CallbackQueryHandler(show_faq_menu, pattern="^faq$"))
-    application.add_handler(CallbackQueryHandler(show_faq_answer, pattern="^faq_\d+$"))
-    application.add_handler(CallbackQueryHandler(get_subscription_code, pattern="^get_subscription_code$"))
-    application.add_handler(CallbackQueryHandler(show_contact_us, pattern="^contact_us$"))
-    application.add_handler(CallbackQueryHandler(language_menu_handler, pattern="^language$"))
-    application.add_handler(CallbackQueryHandler(set_language_and_reply, pattern="^set_lang_"))
-    application.add_handler(CallbackQueryHandler(delete_message_handler, pattern="^delete_message$"))
+    application.add_handler(CallbackQueryHandler(main_menu_handler, pattern=r"^main_menu$"))
+    application.add_handler(CallbackQueryHandler(show_featured_plans, pattern=r"^featured_plans$"))
+    application.add_handler(CallbackQueryHandler(show_static_message, pattern=r"^(how_it_works|privacy_policy)$"))
+    application.add_handler(CallbackQueryHandler(show_faq_menu, pattern=r"^faq$"))
+    application.add_handler(CallbackQueryHandler(show_faq_answer, pattern=r"^faq_\d+$"))
+    application.add_handler(CallbackQueryHandler(get_subscription_code, pattern=r"^get_subscription_code$"))
+    application.add_handler(CallbackQueryHandler(show_contact_us, pattern=r"^contact_us$"))
+    application.add_handler(CallbackQueryHandler(language_menu_handler, pattern=r"^language$"))
+    application.add_handler(CallbackQueryHandler(set_language_and_reply, pattern=r"^set_lang_"))
+    application.add_handler(CallbackQueryHandler(delete_message_handler, pattern=r"^delete_message$"))
     
-    # This handler opens the web app directly from a callback button
-    application.add_handler(CallbackQueryHandler(start_command, pattern="^open_webapp$"))
+    application.add_handler(CallbackQueryHandler(start_command, pattern=r"^open_webapp$"))
 
 
     logger.info("Bot is running...")
