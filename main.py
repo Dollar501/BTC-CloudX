@@ -80,8 +80,8 @@ async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     await query.answer()
     
     key = query.data
-    
-    text = STATIC_MESSAGES.get(key, "عذراً، المحتوى المطلوب غير موجود.")
+    lang = context.user_data.get('lang', 'ar')
+    text = STATIC_MESSAGES.get(lang, {}).get(key, "عذراً، المحتوى المطلوب غير موجود.")
     
     keyboard = [[InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")]]
     reply_markup = InlineKeyboardMarkup(keyboard)
