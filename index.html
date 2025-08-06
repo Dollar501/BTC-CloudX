@@ -107,7 +107,7 @@
     <main class="p-4 space-y-6">
         <!-- Page: Home -->
         <section id="home-page" class="page active text-center">
-            <img src="img/logo.png" alt="BTC-CloudX Logo" class="rounded-full mx-auto mb-4 border-2 border-green-500">
+            <img src="img/logo.png" alt="BTC-CloudX Logo" class="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-green-500 shadow-lg">
             <h1 class="text-4xl font-bold text-white">أهلاً بك في BTC-CloudX</h1>
             <p class="text-lg text-gray-300 mt-2">بوابتك الآمنة للاستثمار في مستقبل التعدين السحابي. ابدأ رحلتك الاستثمارية معنا اليوم.</p>
         </section>
@@ -133,7 +133,7 @@
             <h1 class="text-3xl font-bold">💡 صمّم خطتك الاستثمارية</h1>
             <div>
                 <label for="investment_amount" class="block mb-2 text-md font-medium">1. حدد مبلغ الاستثمار (بالدولار)</label>
-                <input type="number" id="investment_amount" class="form-input block w-full p-3 rounded-lg text-center text-xl" placeholder="مثال: 1000" value="1000" min="999">
+                <input type="number" id="investment_amount" class="form-input block w-full p-3 rounded-lg text-center text-xl" placeholder="الحد الأدنى 1000 دولار" value="1000" min="1000">
             </div>
             <div>
                 <label for="investment_duration" class="block mb-2 text-md font-medium">2. حدد مدة العقد (سنوات)</label>
@@ -201,98 +201,226 @@
     </div>
 
     <script>
-       const tg = window.Telegram.WebApp;
+        const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
+        const LANG_PACK = {
+            ar: {
+                // Titles & Nav
+                home_title: "أهلاً بك في BTC-CloudX",
+                home_subtitle: "بوابتك الآمنة للاستثمار في مستقبل التعدين السحابي. ابدأ رحلتك الاستثمارية معنا اليوم.",
+                plans_title: "📊 الخطط الاستثمارية المميزة",
+                hardware_title: "📠 أجهزتنا للتعدين",
+                custom_plan_title: "💡 صمّم خطتك الاستثمارية",
+                faq_title: "❓ أسئلة شائعة",
+                nav_home: "الرئيسية",
+                nav_plans: "الخطط",
+                nav_hardware: "الأجهزة",
+                nav_custom_plan: "خطة خاصة",
+                nav_faq: "الأسئلة",
+                // Plans
+                investment: "الاستثمار",
+                hashrate: "القوة التعدينية",
+                device: "الجهاز المصدر",
+                daily_profit: "الربح اليومي الصافي",
+                annual_profit: "الربح السنوي الصافي",
+                semi_annual_bonus: "عائد نصف سنوي",
+                subscribe_now: "اشترك الآن",
+                // Hardware
+                efficiency: "الكفاءة",
+                hardware_modal_info: "هذا الجهاز من أفضل الأجهزة في فئته، ويستخدم في خططنا لضمان أعلى عائد ممكن للمستثمرين.",
+                // Custom Plan
+                custom_plan_amount_label: "1. حدد مبلغ الاستثمار (بالدولار)",
+                custom_plan_amount_placeholder: "الحد الأدنى 1000 دولار",
+                custom_plan_duration_label: "2. حدد مدة العقد (سنوات)",
+                year_one: "سنة واحدة",
+                year_two: "سنتان",
+                year_three: "3 سنوات",
+                year_unit: "سنة",
+                calculate_button: "احسب الخطة",
+                custom_plan_results_title: "نتائج خطتك المخصصة",
+                estimated_hashrate: "القوة التعدينية المقدرة",
+                estimated_daily_profit: "صافي الربح اليومي المقدر",
+                total_mining_profit: "إجمالي ربح التعدين",
+                additional_bonus: "العائد الإضافي (25% كل 6 شهور)",
+                total_estimated: "الإجمالي الكلي المتوقع",
+                disclaimer: "هذه الأرقام تقديرية وتعتمد على سعر البيتكوين الحالي وصعوبة الشبكة.",
+                submit_plan_button: "أرسل الخطة للبوت واطلبها",
+                // Modals
+                confirm_subscription: "تأكيد الاشتراك",
+                confirm_subscription_q: "هل تريد تأكيد الاشتراك في الخطة التالية؟",
+                plan: "الخطة",
+                price: "السعر",
+                power: "القوة",
+                yes_confirm: "نعم، أوافق",
+                no_cancel: "لا، تراجع",
+                // FAQ
+                faq_data: [
+                    { q: 'ما طبيعة عملكم؟', a: 'نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نتولى كل شيء، من الصيانة والتشغيل، وأنت تحصل على الأرباح بشكل يومي.' },
+                    { q: 'كيف تُحسب الأرباح؟', a: 'تعتمد الأرباح على القوة التعدينية التي تملكها، وسعر البيتكوين الحالي، وصعوبة الشبكة. تُخصم رسوم الكهرباء والصيانة يوميًا من الناتج الإجمالي، والمتبقي هو ربحك الصافي. الاستثمار ينطوي على مخاطر تقلب الأسعار.' },
+                    { q: 'هل أحصل على شهادة أو إثبات؟', a: 'نعم، عند الاشتراك في أي خطة، ستحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى مُعرّف اشتراك فريد (ID) خاص بك لمتابعة استثمارك.' },
+                    { q: 'كيف يمكنني التواصل مع الدعم الفني؟', a: 'يمكنك التواصل مع فريق الدعم مباشرة عبر زر "تواصل معنا" في البوت، أو الانضمام إلى قناتنا على تليجرام لمتابعة آخر الأخبار وتحديثات الأرباح.' }
+                ]
+            },
+            en: {
+                home_title: "Welcome to BTC-CloudX",
+                home_subtitle: "Your secure gateway to invest in the future of cloud mining. Start your investment journey with us today.",
+                plans_title: "📊 Featured Investment Plans",
+                hardware_title: "📠 Our Mining Hardware",
+                custom_plan_title: "💡 Design Your Investment Plan",
+                faq_title: "❓ Frequently Asked Questions",
+                nav_home: "Home",
+                nav_plans: "Plans",
+                nav_hardware: "Hardware",
+                nav_custom_plan: "Custom Plan",
+                nav_faq: "FAQ",
+                investment: "Investment",
+                hashrate: "Hashrate",
+                device: "Source Device",
+                daily_profit: "Net Daily Profit",
+                annual_profit: "Net Annual Profit",
+                semi_annual_bonus: "Semi-Annual Bonus",
+                subscribe_now: "Subscribe Now",
+                efficiency: "Efficiency",
+                hardware_modal_info: "This device is one of the best in its class, used in our plans to ensure the highest possible return for investors.",
+                custom_plan_amount_label: "1. Set Investment Amount (USD)",
+                custom_plan_amount_placeholder: "Minimum $1000",
+                custom_plan_duration_label: "2. Set Contract Duration (Years)",
+                year_one: "1 Year",
+                year_two: "2 Years",
+                year_three: "3 Years",
+                year_unit: "Year",
+                calculate_button: "Calculate Plan",
+                custom_plan_results_title: "Your Custom Plan Results",
+                estimated_hashrate: "Estimated Hashrate",
+                estimated_daily_profit: "Estimated Net Daily Profit",
+                total_mining_profit: "Total Mining Profit",
+                additional_bonus: "Additional Bonus (25% every 6 months)",
+                total_estimated: "Total Estimated Return",
+                disclaimer: "These figures are estimates and depend on the current Bitcoin price and network difficulty.",
+                submit_plan_button: "Send Plan to Bot and Request It",
+                confirm_subscription: "Confirm Subscription",
+                confirm_subscription_q: "Do you want to confirm your subscription to the following plan?",
+                plan: "Plan",
+                price: "Price",
+                power: "Power",
+                yes_confirm: "Yes, I Agree",
+                no_cancel: "No, Go Back",
+                faq_data: [
+                    { q: 'What is the nature of your work?', a: 'We are BTC-CloudX. We provide you with an opportunity to invest in cryptocurrency mining by purchasing hashrate from our farms equipped with the latest hardware. We handle everything, from maintenance to operation, and you receive the profits daily.' },
+                    { q: 'How are profits calculated?', a: 'Profits depend on the hashrate you own, the current Bitcoin price, and network difficulty. Electricity and maintenance fees are deducted daily from the gross output, and the remainder is your net profit. Investment involves risks of price volatility.' },
+                    { q: 'Do I get a certificate or proof?', a: 'Yes, when you subscribe to any plan, you will receive a digital investment certificate with your contract details, in addition to a unique subscription ID to track your investment.' },
+                    { q: 'How can I contact technical support?', a: 'You can contact the support team directly via the "Contact Us" button in the bot, or join our Telegram channel to follow the latest news and profit updates.' }
+                ]
+            },
+            zh: {
+                home_title: "欢迎来到 BTC-CloudX",
+                home_subtitle: "您投资云挖矿未来的安全门户。立即与我们一起开始您的投资之旅。",
+                plans_title: "📊 特色投资计划",
+                hardware_title: "📠 我们的矿机硬件",
+                custom_plan_title: "💡 设计您的投资计划",
+                faq_title: "❓ 常见问题",
+                nav_home: "主页",
+                nav_plans: "计划",
+                nav_hardware: "硬件",
+                nav_custom_plan: "自定义计划",
+                nav_faq: "常见问题",
+                investment: "投资",
+                hashrate: "算力",
+                device: "源设备",
+                daily_profit: "每日净利润",
+                annual_profit: "年度净利润",
+                semi_annual_bonus: "半年奖金",
+                subscribe_now: "立即订阅",
+                efficiency: "效率",
+                hardware_modal_info: "该设备是同类产品中最好的设备之一，用于我们的计划，以确保为投资者带来尽可能高的回报。",
+                custom_plan_amount_label: "1. 设置投资金额（美元）",
+                custom_plan_amount_placeholder: "最低1000美元",
+                custom_plan_duration_label: "2. 设置合同期限（年）",
+                year_one: "1年",
+                year_two: "2年",
+                year_three: "3年",
+                year_unit: "年",
+                calculate_button: "计算计划",
+                custom_plan_results_title: "您的自定义计划结果",
+                estimated_hashrate: "预计算力",
+                estimated_daily_profit: "预计每日净利润",
+                total_mining_profit: "总挖矿利润",
+                additional_bonus: "额外奖金（每6个月25%）",
+                total_estimated: "预计总回报",
+                disclaimer: "这些数字是估算值，取决于当前的比特币价格和网络难度。",
+                submit_plan_button: "将计划发送给机器人并请求",
+                confirm_subscription: "确认订阅",
+                confirm_subscription_q: "您要确认订阅以下计划吗？",
+                plan: "计划",
+                price: "价格",
+                power: "算力",
+                yes_confirm: "是的，我同意",
+                no_cancel: "不，返回",
+                faq_data: [
+                    { q: '你们的工作性质是什么？', a: '我们是 BTC-CloudX。我们为您提供投资加密货币挖矿的机会，您可以从我们配备最新硬件的矿场购买算力。我们处理从维护到运营的一切事务，您每天都能获得利润。' },
+                    { q: '利润是如何计算的？', a: '利润取决于您拥有的算力、当前的比特币价格和网络难度。电费和维护费每天从总产出中扣除，余下的是您的净利润。投资涉及价格波动的风险。' },
+                    { q: '我能获得证书或证明吗？', a: '是的，当您订阅任何计划时，您将收到一份包含合同详情的数字投资证书，以及一个用于跟踪您投资的唯一订阅ID。' },
+                    { q: '我如何联系技术支持？', a: '您可以直接通过机器人中的“联系我们”按钮联系支持团队，或加入我们的Telegram频道以获取最新消息和利润更新。' }
+                ]
+            }
+        };
+         let currentLang = localStorage.getItem('appLanguage') || 'ar';
+
+        function translatePage(lang) {
+            const translations = LANG_PACK[lang];
+            if (!translations) return;
+
+            // Set page direction and font
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.body.style.fontFamily = lang === 'zh' ? "'Noto Sans SC', sans-serif" : (lang === 'en' ? "'Roboto', sans-serif" : "'Cairo', sans-serif");
+
+
+            // Translate all elements with data-lang-key
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (translations[key]) {
+                    el.innerHTML = translations[key];
+                }
+            });
+            
+            // Translate all elements with data-lang-placeholder
+            document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-lang-placeholder');
+                if (translations[key]) {
+                    el.placeholder = translations[key];
+                }
+            });
+
+            // Re-render dynamic content
+            renderPlansPage(lang);
+            renderHardwarePage(lang);
+            renderFaqPage(lang);
+        }
+
         // --- CONFIG & DATA ---
-        const TELEGRAM_SUPPORT_URL = "https://t.me/BTC_CloudX";
+        const TELEGRAM_SUPPORT_URL = "https://t.me/BTC_CloudX"; // Replace with your actual support username
 
         const DATA = {
-    // قسم الأجهزة المتاحة للتعدين
-    HARDWARE: [
-        { 
-            id: 's21xp_hydro', 
-            name: 'Antminer S21 XP Hydro', 
-            efficiency: '12.0 J/TH', 
-            image: "img/antminer_s21xp_hydro.jpg" 
-        },
-        { 
-            id: 's21xp', 
-            name: 'Antminer S21 XP', 
-            efficiency: '13.5 J/TH', 
-            image: "img/Antminer_S21_XP_270TH.jpg" 
-        },
-        { 
-            id: 'm66s', 
-            name: 'WhatsMiner M66S++', 
-            efficiency: '14.0 J/TH', 
-            image: "img/WhatsMiner_M66S++.jpg" 
-        }
-    ],
-
-    // قسم خطط الاستثمار
-    PLANS: [
-        {
-            id: 'pro_contract', // معرف فريد للخطة
-            name: 'العقد الاحترافي (Pro)',
-            price: 200.00,
-            duration_months: 12,
-            hashrate: 10, // TH/s
-            device_source: 'Antminer S21 XP',
-            profits: { // تجميع الأرباح في كائن واحد
-                daily: 0.4075,
-                monthly: 12.22,
-                annual: 148.73
-            },
-            bonus: null // لا توجد مكافأة لهذه الخطة
-        },
-        {
-            id: 'advanced_contract',
-            name: 'العقد المتقدم (Advanced)',
-            price: 500.00,
-            duration_months: 12,
-            hashrate: 26, // TH/s
-            device_source: 'Antminer S21 XP',
-            profits: {
-                daily: 1.0595,
-                monthly: 31.78,
-                annual: 386.71
-            },
-            bonus: { // كائن خاص للمكافآت لمزيد من التنظيم
-                description: 'مكافأة نصف سنوية',
-                amount: 125.00, // 25% of 500
-                period_months: 6
-            }
-        },
-        {
-            id: 'elite_hydro_contract',
-            name: 'عقد النخبة المائي (Elite Hydro)',
-            price: 1000.00,
-            duration_months: 12,
-            hashrate: 55, // TH/s
-            device_source: 'Antminer S21 XP Hydro',
-            profits: {
-                daily: 2.406,
-                monthly: 72.18,
-                annual: 878.19
-            },
-            bonus: {
-                description: 'مكافأة نصف سنوية',
-                amount: 250.00, // 25% of 1000
-                period_months: 6
-            }
-        }
-    ],
-
-    // قسم الأسئلة الشائعة (بدون تغيير عن النسخة المصححة السابقة)
-    FAQ: [
-        { q: 'ما طبيعة عملكم؟', a: 'نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نتولى كل شيء، من الصيانة والتشغيل، وأنت تحصل على الأرباح بشكل يومي.' },
-        { q: 'كيف تُحسب الأرباح؟', a: 'تعتمد الأرباح على القوة التعدينية التي تملكها، وسعر البيتكوين الحالي، وصعوبة الشبكة. تُخصم رسوم الكهرباء والصيانة يوميًا من الناتج الإجمالي، والمتبقي هو ربحك الصافي. الاستثمار ينطوي على مخاطر تقلب الأسعار.' },
-        { q: 'هل أحصل على شهادة أو إثبات؟', a: 'نعم، عند الاشتراك في أي خطة، ستحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى مُعرّف اشتراك فريد (ID) خاص بك لمتابعة استثمارك.' },
-        { q: 'كيف يمكنني التواصل مع الدعم الفني؟', a: 'يمكنك التواصل مع فريق الدعم مباشرة عبر زر "تواصل معنا" في البوت، أو الانضمام إلى قناتنا على تليجرام لمتابعة آخر الأخبار وتحديثات الأرباح.' }
-    ]
-};
+            HARDWARE: [
+                { id: 's21xp_hydro', name: 'Antminer S21 XP Hydro', efficiency: '12.0 J/TH', image: "img/antminer_s21xp_hydro.jpg" },
+                { id: 's21xp', name: 'Antminer S21 XP', efficiency: '13.5 J/TH', image: "img/Antminer_S21_XP_270TH.jpg" },
+                { id: 'm66s', name: 'WhatsMiner M66S++', efficiency: '14.0 J/TH', image: "img/WhatsMiner_M66S++.jpg" }
+            ],
+            PLANS: [
+                { name: 'العقد الاحترافي (Pro)', price: 200, duration: 12, hashrate: 10, device: 'Antminer S21 XP', daily_profit: 0.41, annual_profit: 148.73, semi_annual_bonus: 50 },
+                { name: 'العقد المتقدم (Advanced)', price: 500, duration: 12, hashrate: 26, device: 'Antminer S21 XP', daily_profit: 1.06, annual_profit: 386.71, semi_annual_bonus: 125 },
+                { name: 'عقد النخبة المائي (Elite Hydro)', price: 1000, duration: 12, hashrate: 55, device: 'Antminer S21 XP Hydro', daily_profit: 2.41, annual_profit: 878.19, semi_annual_bonus: 250 }
+            ],
+            FAQ: [
+                { q: 'ما طبيعة عملكم؟', a: 'نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نتولى كل شيء، من الصيانة والتشغيل، وأنت تحصل على الأرباح بشكل يومي.' },
+                { q: 'كيف تُحسب الأرباح؟', a: 'تعتمد الأرباح على القوة التعدينية التي تملكها، وسعر البيتكوين الحالي، وصعوبة الشبكة. تُخصم رسوم الكهرباء والصيانة يوميًا من الناتج الإجمالي، والمتبقي هو ربحك الصافي. الاستثمار ينطوي على مخاطر تقلب الأسعار.' },
+                { q: 'هل أحصل على شهادة أو إثبات؟', a: 'نعم، عند الاشتراك في أي خطة، ستحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى مُعرّف اشتراك فريد (ID) خاص بك لمتابعة استثمارك.' },
+                { q: 'كيف يمكنني التواصل مع الدعم الفني؟', a: 'يمكنك التواصل مع فريق الدعم مباشرة عبر زر "تواصل معنا" في البوت، أو الانضمام إلى قناتنا على تليجرام لمتابعة آخر الأخبار وتحديثات الأرباح.' }
+            ]
+        };
 
         // --- PAGE NAVIGATION LOGIC ---
         const pages = document.querySelectorAll('.page');
@@ -310,7 +438,6 @@
                     btn.classList.add('active');
                 }
             });
-            // التأكد من أن HapticFeedback مدعوم قبل استدعائه
             if (tg.HapticFeedback && tg.HapticFeedback.impactOccurred) {
                 tg.HapticFeedback.impactOccurred('light');
             }
@@ -321,40 +448,77 @@
         });
 
         // --- DYNAMIC CONTENT RENDERING ---
-        function renderPlansPage() {
+        function renderPlansPage(lang) {
             const container = document.getElementById('plans-container');
-            if (!container) return; // حماية في حال عدم وجود العنصر
+            const t = LANG_PACK[lang];
+            if (!container || !t) return;
             container.innerHTML = DATA.PLANS.map(plan => {
-                // استخدام JSON.stringify مرة واحدة وتمرير البيانات بأمان
                 const planData = encodeURIComponent(JSON.stringify(plan));
                 return `
                 <div class="bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-xl border border-[#30363d] shadow-lg">
-                    <h2 class="text-2xl font-bold text-green-400">${plan.name}</h2>
+                    <h2 class="text-2xl font-bold text-green-400">${plan.name[lang]}</h2>
                     <div class="mt-3 space-y-2 text-md">
-                        <p><strong>💰 الاستثمار:</strong> <span class="font-bold text-white">$${plan.price}</span></p>
-                        <p><strong>⚙️ القوة التعدينية:</strong> <span class="font-bold text-white">${plan.hashrate} TH/s</span></p>
-                        <p><strong>🔌 الجهاز المصدر:</strong> <span class="font-bold text-white">${plan.device}</span></p>
+                        <p><strong>💰 ${t.investment}:</strong> <span class="font-bold text-white">$${plan.price}</span></p>
+                        <p><strong>⚙️ ${t.hashrate}:</strong> <span class="font-bold text-white">${plan.hashrate} TH/s</span></p>
+                        <p><strong>🔌 ${t.device}:</strong> <span class="font-bold text-white">${plan.device}</span></p>
                         <hr class="border-gray-600 my-2">
-                        <p><strong>📈 الربح اليومي الصافي:</strong> <span class="font-bold text-green-300">~$${plan.daily_profit.toFixed(2)}</span></p>
-                        <p><strong>📅 الربح السنوي الصافي:</strong> <span class="font-bold text-green-300">~$${plan.annual_profit.toFixed(2)}</span></p>
+                        <p><strong>📈 ${t.daily_profit}:</strong> <span class="font-bold text-green-300">~$${plan.daily_profit.toFixed(2)}</span></p>
+                        <p><strong>📅 ${t.annual_profit}:</strong> <span class="font-bold text-green-300">~$${plan.annual_profit.toFixed(2)}</span></p>
+                        <p><strong>🎁 ${t.semi_annual_bonus}:</strong> <span class="font-bold text-blue-300">+$${plan.semi_annual_bonus.toFixed(2)}</span></p>
                     </div>
-                    <button onclick='showPlanConfirmationModal(JSON.parse(decodeURIComponent("${planData}")))' class="w-full mt-4 text-white p-3 rounded-lg font-bold" style="background-color: var(--tg-theme-button-color);">
-                        اشترك الآن
-                    </button>
-                </div>
-                `}).join('');
+                    <button onclick='showPlanConfirmationModal(JSON.parse(decodeURIComponent("${planData}")))' class="w-full mt-4 text-white p-3 rounded-lg font-bold" style="background-color: var(--tg-theme-button-color);">${t.subscribe_now}</button>
+                </div>`;
+            }).join('');
         }
+
 
         function renderHardwarePage() {
             const container = document.getElementById('hardware-container');
             if (!container) return;
             container.innerHTML = DATA.HARDWARE.map(device => `
-                <div class="bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-xl border border-[#30363d] text-center cursor-pointer" onclick="showHardwareModal('${device.id}')">
+                <div class="bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-xl border border-[#30363d] text-center cursor-pointer transform hover:scale-105 transition-transform duration-300" onclick="showHardwareModal('${device.id}')">
                     <img src="${device.image}" alt="${device.name}" class="rounded-md w-full h-40 object-cover mb-3">
                     <h2 class="text-xl font-bold">${device.name}</h2>
                     <p class="text-gray-400">الكفاءة: ${device.efficiency}</p>
                 </div>
             `).join('');
+        }
+        function renderHardwarePage(lang) {
+            const container = document.getElementById('hardware-container');
+            const t = LANG_PACK[lang];
+            if (!container || !t) return;
+            container.innerHTML = DATA.HARDWARE.map(device => `
+                <div class="bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-xl border border-[#30363d] text-center cursor-pointer" onclick="showHardwareModal('${device.id}')">
+                    <img src="${device.image}" alt="${device.name}" class="rounded-md w-full h-40 object-cover mb-3">
+                    <h2 class="text-xl font-bold">${device.name}</h2>
+                    <p class="text-gray-400">${t.efficiency}: ${device.efficiency}</p>
+                </div>`).join('');
+        }
+
+        function renderFaqPage(lang) {
+            const container = document.getElementById('faq-container');
+            const t = LANG_PACK[lang];
+            if (!container || !t || !t.faq_data) return;
+            container.innerHTML = t.faq_data.map(item => `
+                <div class="bg-[var(--tg-theme-secondary-bg-color)] rounded-lg border border-[#30363d]">
+                    <button class="accordion-toggle w-full p-4 text-right font-bold flex justify-between items-center">
+                        <span>${item.q}</span><span class="transform transition-transform duration-300 text-xl">+</span>
+                    </button>
+                    <div class="accordion-content px-4 pb-4 text-gray-300"><p>${item.a}</p></div>
+                </div>`).join('');
+            
+            document.querySelectorAll('.accordion-toggle').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const content = event.currentTarget.nextElementSibling;
+                    const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+                    document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                    document.querySelectorAll('.accordion-toggle span:last-child').forEach(i => i.style.transform = 'rotate(0deg)');
+                    if (!isOpen) {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        event.currentTarget.querySelector('span:last-child').style.transform = 'rotate(45deg)';
+                    }
+                });
+            });
         }
 
         function renderFaqPage() {
@@ -364,7 +528,7 @@
                 <div class="bg-[var(--tg-theme-secondary-bg-color)] rounded-lg border border-[#30363d]">
                     <button class="accordion-toggle w-full p-4 text-right font-bold flex justify-between items-center" data-index="${index}">
                         <span>${item.q}</span>
-                        <span class="transform transition-transform duration-300">+</span>
+                        <span class="transform transition-transform duration-300 text-xl">+</span>
                     </button>
                     <div class="accordion-content px-4 pb-4 text-gray-300">
                         <p>${item.a}</p>
@@ -377,13 +541,11 @@
                     const currentButton = event.currentTarget;
                     const content = currentButton.nextElementSibling;
                     const icon = currentButton.querySelector('span:last-child');
-                    const isOpen = content.style.maxHeight;
+                    const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
 
-                    // أغلق جميع الأكورديونات الأخرى
                     document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
                     document.querySelectorAll('.accordion-toggle span:last-child').forEach(i => i.style.transform = 'rotate(0deg)');
 
-                    // افتح الأكورديون الحالي إذا كان مغلقًا
                     if (!isOpen) {
                         content.style.maxHeight = content.scrollHeight + "px";
                         icon.style.transform = 'rotate(45deg)';
@@ -401,54 +563,47 @@
 
         function showHardwareModal(deviceId) {
             const device = DATA.HARDWARE.find(d => d.id === deviceId);
+            const t = LANG_PACK[currentLang];
             if (!device) return;
-            
-            modalBody.innerHTML = `
+            hardwareModal.querySelector('#modal-body').innerHTML = `
                 <img src="${device.image}" alt="${device.name}" class="rounded-lg w-full mb-4">
                 <h2 class="text-2xl font-bold">${device.name}</h2>
-                <p class="text-lg text-gray-300 mt-2">كفاءة الطاقة: ${device.efficiency}</p>
-                <p class="mt-4 text-gray-400">هذا الجهاز من أفضل الأجهزة في فئته، ويستخدم في خططنا لضمان أعلى عائد ممكن للمستثمرين.</p>
-            `;
+                <p class="text-lg text-gray-300 mt-2">${t.efficiency}: ${device.efficiency}</p>
+                <p class="mt-4 text-gray-400">${t.hardware_modal_info}</p>`;
             hardwareModal.style.display = 'flex';
+            
         }
 
         function showPlanConfirmationModal(plan) {
-            planModalBody.innerHTML = `
-                <h3 class="text-xl font-bold mb-3">تأكيد الاشتراك</h3>
-                <p class="mb-4">هل تريد تأكيد الاشتراك في الخطة التالية؟</p>
+            const t = LANG_PACK[currentLang];
+            if (!plan || !t) return;
+            planModal.querySelector('#plan-modal-body').innerHTML = `
+                <h3 class="text-xl font-bold mb-3">${t.confirm_subscription}</h3>
+                <p class="mb-4">${t.confirm_subscription_q}</p>
                 <div class="text-right space-y-2 p-3 bg-[#010409] rounded-lg border border-gray-700">
-                    <p><strong>الخطة:</strong> ${plan.name}</p>
-                    <p><strong>السعر:</strong> $${plan.price}</p>
-                    <p><strong>القوة:</strong> ${plan.hashrate} TH/s</p>
-                    <p><strong>الربح السنوي التقديري:</strong> ~$${plan.annual_profit.toFixed(2)}</p>
-                </div>
-            `;
-
-            planModalFooter.innerHTML = `
-                <button onclick="redirectToSupport()" class="w-2/5 text-white p-2 rounded-lg font-bold bg-green-600 hover:bg-green-700">نعم، أوافق</button>
-                <button onclick="closePlanModal()" class="w-2/5 text-white p-2 rounded-lg font-bold bg-red-600 hover:bg-red-700">لا، تراجع</button>
-            `;
-
+                    <p><strong>${t.plan}:</strong> ${plan.name[currentLang]}</p>
+                    <p><strong>${t.price}:</strong> $${plan.price}</p>
+                    <p><strong>${t.power}:</strong> ${plan.hashrate} TH/s</p>
+                </div>`;
+            planModal.querySelector('#plan-modal-footer').innerHTML = `
+                <button onclick="redirectToSupport()" class="w-2/5 text-white p-2 rounded-lg font-bold bg-green-600 hover:bg-green-700">${t.yes_confirm}</button>
+                <button onclick="planModal.style.display='none'" class="w-2/5 text-white p-2 rounded-lg font-bold bg-red-600 hover:bg-red-700">${t.no_cancel}</button>`;
             planModal.style.display = 'flex';
-        }
-
-        function closePlanModal() {
-            planModal.style.display = 'none';
         }
 
         function redirectToSupport() {
             tg.openTelegramLink(TELEGRAM_SUPPORT_URL);
-            closePlanModal();
+            planModal.style.display = 'none';
         }
 
         window.onclick = (event) => {
-            if (event.target == hardwareModal) {
-                hardwareModal.style.display = "none";
+            if (event.target == hardwareModal || event.target == planModal) {
+                event.target.style.display = "none";
             }
-            if (event.target == planModal) {
-                planModal.style.display = "none";
-            }
-        }
+        };
+        hardwareModal.querySelector('.close-button').onclick = () => hardwareModal.style.display = 'none';
+        planModal.querySelector('.close-button').onclick = () => planModal.style.display = 'none';
+
 
         // --- CREATE CUSTOM PLAN LOGIC ---
         const investmentAmountInput = document.getElementById('investment_amount');
@@ -456,6 +611,8 @@
         const durationDisplay = document.getElementById('duration_display');
         const calculateBtn = document.getElementById('calculate-plan-btn');
         const resultsDiv = document.getElementById('plan-results');
+        const t = LANG_PACK[currentLang];
+
 
         durationInput.addEventListener('input', () => {
             durationDisplay.textContent = durationInput.value;
@@ -466,43 +623,33 @@
             const durationYears = parseInt(durationInput.value);
 
             if (isNaN(amount) || amount < 1000) {
-                tg.showAlert('الرجاء إدخال مبلغ استثمار صالح ( 1000 دولار كحد أدنى).');
+                tg.showAlert('الرجاء إدخال مبلغ استثمار صالح (1000 دولار كحد أدنى).');
                 return;
             }
 
-            let pricePerTh = 20;
-            if (amount >= 500) pricePerTh = 19.23;
-            if (amount >= 1000) pricePerTh = 18.18;
+            // Simplified calculation logic based on Elite Hydro plan for amounts >= 1000
+            const pricePerTh = 1000 / 55; // approx 18.18
             const totalHashrate = amount / pricePerTh;
-
-            let feePerTh = 0.038;
-            if (amount >= 1000) feePerTh = 0.035;
-
-            const btcPerThPerDay = 0.00000105;
-            const btcPrice = 75000;
-
-            const grossDailyIncome = totalHashrate * btcPerThPerDay * btcPrice;
-            const totalDailyFees = totalHashrate * feePerTh;
-            const netDailyProfit = grossDailyIncome - totalDailyFees;
-
-            const netMonthlyProfit = netDailyProfit * 30;
+            const netDailyProfitPerTh = 2.41 / 55; // From Elite Hydro plan
+            
+            const netDailyProfit = totalHashrate * netDailyProfitPerTh;
             const netAnnualProfit = netDailyProfit * 365;
             const baseProfit = netAnnualProfit * durationYears;
-
-            // ✅ حساب العائد الإضافي 25% نص سنوي
+            
+            // Calculate the 25% semi-annual bonus
             const semiAnnualBonus = amount * 0.25 * durationYears * 2;
             const totalProfit = baseProfit + semiAnnualBonus;
 
             resultsDiv.innerHTML = `
                 <h3 class="text-xl font-bold text-center text-green-400">نتائج خطتك المخصصة</h3>
-                <p><strong>- القوة التعدينية:</strong> ${totalHashrate.toFixed(2)} TH/s</p>
-                <p><strong>- صافي الربح اليومي:</strong> ~$${netDailyProfit.toFixed(2)}</p>
-                <p><strong>- صافي الربح الشهري:</strong> ~$${netMonthlyProfit.toFixed(2)}</p>
-                <p><strong>- إجمالي الربح (${durationYears} سنوات):</strong> ~$${baseProfit.toFixed(2)}</p>
-                <p><strong>- العائد الإضافي (25% × كل 6 شهور):</strong> ~$${semiAnnualBonus.toFixed(2)}</p>
+                <p><strong>- القوة التعدينية المقدرة:</strong> ${totalHashrate.toFixed(2)} TH/s</p>
+                <p><strong>- صافي الربح اليومي المقدر:</strong> ~$${netDailyProfit.toFixed(2)}</p>
+                <hr class="border-gray-600 my-2">
+                <p><strong>- إجمالي ربح التعدين (${durationYears} سنوات):</strong> ~$${baseProfit.toFixed(2)}</p>
+                <p class="text-blue-300"><strong>- العائد الإضافي (25% كل 6 شهور):</strong> +$${semiAnnualBonus.toFixed(2)}</p>
                 <hr class="border-gray-600 my-2">
                 <p class="font-bold text-white text-xl">الإجمالي الكلي المتوقع: ~$${totalProfit.toFixed(2)}</p>
-                <p class="text-xs text-gray-400">هذه الأرقام تقديرية وتعتمد على سعر البيتكوين الحالي وصعوبة الشبكة.</p>
+                <p class="text-xs text-gray-400 mt-2">هذه الأرقام تقديرية وتعتمد على سعر البيتكوين الحالي وصعوبة الشبكة.</p>
                 <button id="submit-plan-btn" class="w-full mt-4 text-white p-3 rounded-lg font-bold" style="background-color: var(--tg-theme-button-color);">أرسل الخطة للبوت واطلبها</button>
             `;
             resultsDiv.classList.remove('hidden');
