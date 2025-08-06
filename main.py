@@ -97,18 +97,20 @@ async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE
     response = f"*{get_text('featured_plans_title', context)}*\n\n"
     
     for plan in INVESTMENT_PLANS:
-        # Use bold for the plan name
-        response += f"*{plan['name']}*\n"
-        # Use hardcoded Arabic labels to ensure they always appear correctly
-        response += f"💰 مبلغ الاستثمار: ${plan['price']}\n"
-        response += f"⚙️ القوة التعدينية: {plan['hashrate']} TH/s\n"
-        response += f"🔌 الجهاز المصدر: {plan['device_source']}\n"
-        response += f"📈 الربح اليومي الصافي: ~${plan['daily_profit']:.2f}\n"
-        response += f"📅 الربح السنوي الصافي: ~${plan['annual_profit']:.2f}\n"
+        # Get the plan name in the user's language
+        lang = context.user_data.get('lang', 'ar')
+        plan_name = plan['name'].get(lang, plan['name']['ar'])
+        response += f"*{plan_name}*\n"
+        # Use localized text for plan details
+        response += f"💰 {get_text('price', context)}: ${plan['price']}\n"
+        response += f"⚙️ {get_text('hashrate', context)}: {plan['hashrate']} TH/s\n"
+        response += f"🔌 {get_text('device_source', context)}: {plan['device_source']}\n"
+        response += f"📈 {get_text('daily_profit', context)}: ~${plan['daily_profit']:.2f}\n"
+        response += f"📅 {get_text('annual_profit', context)}: ~${plan['annual_profit']:.2f}\n"
         
         # Check for the semi-annual bonus and add it if it exists
         if 'semi_annual_bonus' in plan and plan['semi_annual_bonus'] > 0:
-            response += f"🎁 عائد نصف سنوي: ${plan['semi_annual_bonus']:.2f}\n"
+            response += f"🎁 {get_text('semi_annual_bonus', context)}: ${plan['semi_annual_bonus']:.2f}\n"
         
         response += "--------------------\n"
     

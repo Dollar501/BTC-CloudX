@@ -36,9 +36,11 @@ LANGUAGES = {
         "subscription_code_text": "✅ تم إنشاء كود الاشتراك الخاص بك بنجاح!\n\nالكود الخاص بك هو:\n`{user_code}`\n\nاحتفظ بهذا الكود، فهو معرّفك الدائم معنا.",
 
         # Contact Us
+        "contact_us_title": "📞 تواصل معنا",
         "contact_us_content": "فريقنا جاهز للإجابة على جميع استفساراتك. يمكنك التواصل معنا عبر:",
         "join_channel_button": "📢 قناتنا على تليجرام",
         "contact_support_button": "💬 التحدث إلى الدعم الفني",
+        "contact_me_button": "💬 تواصل معي",
 
         # Language
         "select_language": "اختر لغتك المفضلة:",
@@ -52,104 +54,129 @@ LANGUAGES = {
         "total_profit_estimate": "إجمالي الربح الصافي التقديري",
         "plan_request_prompt": "لطلب هذه الخطة أو لمناقشة التفاصيل، يرجى التواصل مع الدعم الفني.",
         "close_message_button": "✖️ إغلاق",
+        
+        # Plan Categories
+        "monthly_plans": "📅 الخطط الشهرية",
+        "quarterly_plans": "📅 الخطط ربع السنوية",
+        "annually_plans": "📅 الخطط السنوية",
+        "plans_title": "📊 خطط الاستثمار",
+        "plans_intro": "اختر نوع الخطة التي تناسبك:",
     },
     'en': {
         # General
-        "welcome": "Welcome {user_mention} to *BTC-CloudX*!\n\nUse the buttons below to get started.",
-        "open_app_button": "🚀 Open Full App",
-        "bot_menu_button": "⚙️ Use Bot Directly",
-        "main_menu_title": "Bot Main Menu. Choose an option:",
+        "welcome": "🎉 Welcome {user_mention} to *BTC-CloudX*!\n\n🚀 Your gateway to secure cloud mining investment. Use the buttons below to get started!",
+        "open_app_button": "🚀 Open Full Application",
+        "bot_menu_button": "⚙️ Use Bot Interface",
+        "main_menu_title": "🏠 Main Menu - Choose your option:",
         "back_to_main_menu": "🔙 Back to Main Menu",
-        "price": "Price",
-        "hashrate": "Hashrate",
-        "annual_profit": "Net Annual Profit",
-        "device_source": "Source Device",
-        "daily_profit": "Net Daily Profit",
-        "semi_annual_bonus": "Semi-Annual Bonus",
+        "price": "💰 Price",
+        "hashrate": "⚡ Hash Rate",
+        "annual_profit": "📈 Net Annual Profit",
+        "device_source": "🖥️ Mining Device",
+        "daily_profit": "💵 Daily Net Profit",
+        "semi_annual_bonus": "🎁 Semi-Annual Bonus",
 
         # Main Menu Buttons
-        "featured_plans": "📊 Featured Plans",
-        "how_it_works": "⚙️ How It Works",
-        "faq": "❓ FAQ",
-        "privacy_policy": "📄 Privacy & Policy",
-        "get_subscription_code": "💳 Get Subscription Code",
-        "contact_us": "📞 Contact Us",
-        "language": "🌐 Language",
+        "featured_plans": "📊 Premium Investment Plans",
+        "how_it_works": "⚙️ How Our Service Works",
+        "faq": "❓ Frequently Asked Questions",
+        "privacy_policy": "📄 Privacy Policy & Terms",
+        "get_subscription_code": "💳 Generate Subscription Code",
+        "contact_us": "📞 Contact Support Team",
+        "language": "🌐 Change Language",
 
         # Sections Content
-        "featured_plans_title": "Featured Investment Plans",
-        "faq_title": "Select a question to see its answer:",
-        "back_to_faq_menu": "🔙 Back to FAQ List",
+        "featured_plans_title": "🌟 Premium Investment Plans",
+        "faq_title": "❓ Select a question to view the answer:",
+        "back_to_faq_menu": "🔙 Return to FAQ List",
 
         # Subscription Code
-        "subscription_code_text": "✅ Your subscription code has been successfully created!\n\nYour code is:\n`{user_code}`\n\nKeep this code, it is your permanent identifier with us.",
+        "subscription_code_text": "✅ Success! Your subscription code has been generated!\n\n🔑 Your unique code is:\n`{user_code}`\n\n💡 Please save this code - it's your permanent identifier with BTC-CloudX!",
 
         # Contact Us
-        "contact_us_content": "Our team is ready to answer all your inquiries. You can contact us via:",
-        "join_channel_button": "📢 Our Telegram Channel",
-        "contact_support_button": "💬 Chat with Technical Support",
+        "contact_us_title": "📞 Contact Us",
+        "contact_us_content": "💬 Our support team is available 24/7 to help you! Contact us through:",
+        "join_channel_button": "📢 Join Our Telegram Channel",
+        "contact_support_button": "💬 Chat with Support Agent",
+        "contact_me_button": "💬 Contact Me",
 
         # Language
-        "select_language": "Select your preferred language:",
-        "language_updated": "✅ Language updated to English.",
+        "select_language": "🌐 Choose your preferred language:",
+        "language_updated": "✅ Language successfully updated to English!",
 
         # Web App Data Handler
-        "custom_plan_result_title": "✅ Your custom plan details have been received",
-        "investment_amount": "Investment Amount",
-        "contract_duration": "Contract Duration",
-        "calculated_hashrate": "Calculated Hashrate",
-        "total_profit_estimate": "Estimated Total Net Profit",
-        "plan_request_prompt": "To request this plan or discuss details, please contact technical support.",
-        "close_message_button": "✖️ Close",
+        "custom_plan_result_title": "✅ Custom Plan Details Received Successfully!",
+        "investment_amount": "💰 Investment Amount",
+        "contract_duration": "📅 Contract Duration",
+        "calculated_hashrate": "⚡ Calculated Hash Rate",
+        "total_profit_estimate": "📊 Estimated Total Net Profit",
+        "plan_request_prompt": "🤝 To proceed with this plan or discuss details, please contact our technical support team.",
+        "close_message_button": "✖️ Close Message",
+        
+        # Plan Categories
+        "monthly_plans": "📅 Monthly Plans",
+        "quarterly_plans": "📅 Quarterly Plans",
+        "annually_plans": "📅 Annual Plans",
+        "plans_title": "📊 Investment Plans",
+        "plans_intro": "Choose the plan type that suits you:",
     },
     'zh': {
         # General
-        "welcome": "欢迎 {user_mention} 来到 *BTC-CloudX*！\n\n请使用下面的按钮开始。",
-        "open_app_button": "🚀 打开完整应用",
-        "bot_menu_button": "⚙️ 直接使用机器人",
-        "main_menu_title": "机器人主菜单。请选择一个选项：",
+        "welcome": "🎉 欢迎 {user_mention} 来到 *BTC-CloudX*！\n\n🚀 您的安全云挖矿投资门户。请使用下面的按钮开始您的投资之旅！",
+        "open_app_button": "🚀 打开完整应用程序",
+        "bot_menu_button": "⚙️ 使用机器人界面",
+        "main_menu_title": "🏠 主菜单 - 请选择您的选项：",
         "back_to_main_menu": "🔙 返回主菜单",
-        "price": "价格",
-        "hashrate": "算力",
-        "annual_profit": "年净利润",
-        "device_source": "源设备",
-        "daily_profit": "日净利润",
-        "semi_annual_bonus": "半年奖金",
+        "price": "💰 价格",
+        "hashrate": "⚡ 算力",
+        "annual_profit": "📈 年净利润",
+        "device_source": "🖥️ 挖矿设备",
+        "daily_profit": "💵 日净利润",
+        "semi_annual_bonus": "🎁 半年奖金",
 
         # Main Menu Buttons
-        "featured_plans": "📊 特色计划",
-        "how_it_works": "⚙️ 工作原理",
-        "faq": "❓ 常见问题",
-        "privacy_policy": "📄 隐私与政策",
-        "get_subscription_code": "💳 获取订阅代码",
-        "contact_us": "📞 联系我们",
-        "language": "🌐 语言",
+        "featured_plans": "📊 高级投资计划",
+        "how_it_works": "⚙️ 我们的服务原理",
+        "faq": "❓ 常见问题解答",
+        "privacy_policy": "📄 隐私政策和条款",
+        "get_subscription_code": "💳 生成订阅代码",
+        "contact_us": "📞 联系支持团队",
+        "language": "🌐 更改语言",
 
         # Sections Content
-        "featured_plans_title": "特色投资计划",
-        "faq_title": "选择一个问题以查看答案：",
+        "featured_plans_title": "🌟 高级投资计划",
+        "faq_title": "❓ 选择一个问题查看答案：",
         "back_to_faq_menu": "🔙 返回常见问题列表",
 
         # Subscription Code
-        "subscription_code_text": "✅ 您的订阅代码已成功创建！\n\n您的代码是：\n`{user_code}`\n\n请保留此代码，它是您在我们这里的永久标识符。",
+        "subscription_code_text": "✅ 成功！您的订阅代码已生成！\n\n🔑 您的唯一代码是：\n`{user_code}`\n\n💡 请保存此代码 - 这是您在BTC-CloudX的永久标识符！",
 
         # Contact Us
-        "contact_us_content": "我们的团队随时准备回答您的所有问题。您可以通过以下方式联系我们：",
-        "join_channel_button": "📢 我们的 Telegram 频道",
-        "contact_support_button": "💬 与技术支持聊天",
+        "contact_us_title": "📞 联系我们",
+        "contact_us_content": "💬 我们的支持团队24/7随时为您提供帮助！通过以下方式联系我们：",
+        "join_channel_button": "📢 加入我们的Telegram频道",
+        "contact_support_button": "💬 与支持代理聊天",
+        "contact_me_button": "💬 联系我",
 
         # Language
-        "select_language": "请选择您的首选语言：",
-        "language_updated": "✅ 语言已更新为中文。",
+        "select_language": "🌐 选择您的首选语言：",
+        "language_updated": "✅ 语言已成功更新为中文！",
 
         # Web App Data Handler
-        "custom_plan_result_title": "✅ 已收到您的自定义计划详情",
-        "investment_amount": "投资金额",
-        "contract_duration": "合同期限",
-        "calculated_hashrate": "计算算力",
-        "total_profit_estimate": "预计总净利润",
-        "plan_request_prompt": "如需申请此计划或讨论详情，请联系技术支持。",
-        "close_message_button": "✖️ 关闭",
+        "custom_plan_result_title": "✅ 自定义计划详情接收成功！",
+        "investment_amount": "💰 投资金额",
+        "contract_duration": "📅 合同期限",
+        "calculated_hashrate": "⚡ 计算算力",
+        "total_profit_estimate": "📊 预计总净利润",
+        "plan_request_prompt": "🤝 要继续此计划或讨论详情，请联系我们的技术支持团队。",
+        "close_message_button": "✖️ 关闭消息",
+        
+        # Plan Categories
+        "monthly_plans": "📅 月度计划",
+        "quarterly_plans": "📅 季度计划",
+        "annually_plans": "📅 年度计划",
+        "plans_title": "📊 投资计划",
+        "plans_intro": "选择适合您的计划类型：",
     }
 }
 

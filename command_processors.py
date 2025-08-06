@@ -13,7 +13,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data.setdefault('lang', 'ar')
     context.user_data['menu_expanded'] = True
     
-    welcome_message = f"مرحباً {user.mention_html()},\n{get_text('welcome', context)}"
+    welcome_message = get_text('welcome', context).format(user_mention=user.mention_html())
     
     # Edit the message if it's a callback query, otherwise reply
     if update.callback_query:
