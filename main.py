@@ -52,10 +52,9 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Check if the update is from a callback query (like pressing 'open_webapp' button)
     if update.callback_query:
         await update.callback_query.message.reply_html(welcome_message, reply_markup=reply_markup)
-        await update.callback_query.answer() # Acknowledge the button press
+        await update.callback_query.answer()
     else:
         await update.message.reply_html(welcome_message, reply_markup=reply_markup)
 
@@ -80,7 +79,7 @@ async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     query = update.callback_query
     await query.answer()
     
-    key = query.data  # This will be 'how_it_works' or 'privacy_policy'
+    key = query.data
     
     text = STATIC_MESSAGES.get(key, "عذراً، المحتوى المطلوب غير موجود.")
     
@@ -90,22 +89,26 @@ async def show_static_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     await query.edit_message_text(text=text, reply_markup=reply_markup, parse_mode='Markdown')
 
 async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Displays the featured investment plans in the chat."""
+    """Displays the featured investment plans in the chat with corrected Arabic labels."""
     query = update.callback_query
     await query.answer()
     
+    # Use get_text only for the main title, assuming it's defined in localization
     response = f"*{get_text('featured_plans_title', context)}*\n\n"
+    
     for plan in INVESTMENT_PLANS:
-        response += (
-            f"*{plan['name']}*\n"
-            f"💰 *{get_text('investment_amount', context)}:* ${plan['price']}\n"
-            f"⚙️ *{get_text('hashrate', context)}:* {plan['hashrate']} TH/s\n"
-            f"🔌 *{get_text('device_source', context)}:* {plan['device_source']}\n"
-            f"📈 *{get_text('daily_profit', context)}:* ~${plan['daily_profit']:.2f}\n"
-            f"📅 *{get_text('annual_profit', context)}:* ~${plan['annual_profit']:.2f}\n"
-        )
+        # Use bold for the plan name
+        response += f"*{plan['name']}*\n"
+        # Use hardcoded Arabic labels to ensure they always appear correctly
+        response += f"💰 مبلغ الاستثمار: ${plan['price']}\n"
+        response += f"⚙️ القوة التعدينية: {plan['hashrate']} TH/s\n"
+        response += f"🔌 الجهاز المصدر: {plan['device_source']}\n"
+        response += f"📈 الربح اليومي الصافي: ~${plan['daily_profit']:.2f}\n"
+        response += f"📅 الربح السنوي الصافي: ~${plan['annual_profit']:.2f}\n"
+        
+        # Check for the semi-annual bonus and add it if it exists
         if 'semi_annual_bonus' in plan and plan['semi_annual_bonus'] > 0:
-            response += f"🎁 *{get_text('semi_annual_bonus', context)}:* ${plan['semi_annual_bonus']:.2f}\n"
+            response += f"🎁 عائد نصف سنوي: ${plan['semi_annual_bonus']:.2f}\n"
         
         response += "--------------------\n"
     
@@ -113,6 +116,7 @@ async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     await query.edit_message_text(text=response, reply_markup=reply_markup, parse_mode='Markdown')
+
 
 async def show_faq_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Displays the FAQ questions as buttons."""
@@ -238,13 +242,8 @@ def main() -> None:
     application = Application.builder().token(BOT_TOKEN).build()
 
     # --- Register Handlers ---
-    # Commands
     application.add_handler(CommandHandler("start", start_command))
-
-    # Web App Data
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, web_app_data_handler))
-
-    # Callback Queries
     application.add_handler(CallbackQueryHandler(main_menu_handler, pattern=r"^main_menu$"))
     application.add_handler(CallbackQueryHandler(show_featured_plans, pattern=r"^featured_plans$"))
     application.add_handler(CallbackQueryHandler(show_static_message, pattern=r"^(how_it_works|privacy_policy)$"))
@@ -255,9 +254,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(language_menu_handler, pattern=r"^language$"))
     application.add_handler(CallbackQueryHandler(set_language_and_reply, pattern=r"^set_lang_"))
     application.add_handler(CallbackQueryHandler(delete_message_handler, pattern=r"^delete_message$"))
-    
     application.add_handler(CallbackQueryHandler(start_command, pattern=r"^open_webapp$"))
-
 
     logger.info("Bot is running...")
     application.run_polling()
