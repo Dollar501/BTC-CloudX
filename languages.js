@@ -68,7 +68,7 @@ const LANG_PACK = {
         yes_confirm: "نعم، أوافق",
         no_cancel: "لا، تراجع",
         // FAQ
-        faq_data: [
+        FAQ_DATA: [
             { q: 'ما طبيعة عملكم؟', a: 'نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نتولى كل شيء، من الصيانة والتشغيل، وأنت تحصل على الأرباح بشكل يومي.' },
             { q: 'كيف تُحسب الأرباح؟', a: 'تعتمد الأرباح على القوة التعدينية التي تملكها، وسعر البيتكوين الحالي، وصعوبة الشبكة. تُخصم رسوم الكهرباء والصيانة يوميًا من الناتج الإجمالي، والمتبقي هو ربحك الصافي. الاستثمار ينطوي على مخاطر تقلب الأسعار.' },
             { q: 'هل أحصل على شهادة أو إثبات؟', a: 'نعم، عند الاشتراك في أي خطة، ستحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى مُعرّف اشتراك فريد (ID) خاص بك لمتابعة استثمارك.' },
@@ -106,13 +106,7 @@ const LANG_PACK = {
         days_label: "Day",
         hours_label: "Hour",
         minutes_label: "Minute",
-        custom_plan_title: "💡 Design Your Investment Plan",
-        faq_title: "❓ Frequently Asked Questions",
-        nav_home: "Home",
-        nav_plans: "Plans",
-        nav_hardware: "Hardware",
-        nav_custom_plan: "Custom Plan",
-        nav_faq: "FAQ",
+        // Plans
         investment: "Investment",
         hashrate: "Hashrate",
         device: "Source Device",
@@ -145,7 +139,7 @@ const LANG_PACK = {
         power: "Power",
         yes_confirm: "Yes, I Agree",
         no_cancel: "No, Go Back",
-        faq_data: [
+        FAQ_DATA: [
             { q: 'What is the nature of your work?', a: 'We are BTC-CloudX. We provide you with an opportunity to invest in cryptocurrency mining by purchasing hashrate from our farms equipped with the latest hardware. We handle everything, from maintenance to operation, and you receive the profits daily.' },
             { q: 'How are profits calculated?', a: 'Profits depend on the hashrate you own, the current Bitcoin price, and network difficulty. Electricity and maintenance fees are deducted daily from the gross output, and the remainder is your net profit. Investment involves risks of price volatility.' },
             { q: 'Do I get a certificate or proof?', a: 'Yes, when you subscribe to any plan, you will receive a digital investment certificate with your contract details, in addition to a unique subscription ID to track your investment.' },
@@ -183,13 +177,7 @@ const LANG_PACK = {
         days_label: "天",
         hours_label: "小时",
         minutes_label: "分钟",
-        custom_plan_title: "💡 设计您的投资计划",
-        faq_title: "❓ 常见问题",
-        nav_home: "主页",
-        nav_plans: "计划",
-        nav_hardware: "硬件",
-        nav_custom_plan: "自定义计划",
-        nav_faq: "常见问题",
+        // Plans
         investment: "投资",
         hashrate: "算力",
         device: "源设备",
@@ -222,11 +210,11 @@ const LANG_PACK = {
         power: "算力",
         yes_confirm: "是的，我同意",
         no_cancel: "不，返回",
-        faq_data: [
+        FAQ_DATA: [
             { q: '你们的工作性质是什么？', a: '我们是 BTC-CloudX。我们为您提供投资加密货币挖矿的机会，您可以从我们配备最新硬件的矿场购买算力。我们处理从维护到运营的一切事务，您每天都能获得利润。' },
             { q: '利润是如何计算的？', a: '利润取决于您拥有的算力、当前的比特币价格和网络难度。电费和维护费每天从总产出中扣除，余下的是您的净利润。投资涉及价格波动的风险。' },
             { q: '我能获得证书或证明吗？', a: '是的，当您订阅任何计划时，您将收到一份包含合同详情的数字投资证书，以及一个用于跟踪您投资的唯一订阅ID。' },
-            { q: '我如何联系技术支持？', a: '您可以直接通过机器人中的“联系我们”按钮联系支持团队，或加入我们的Telegram频道以获取最新消息和利润更新。' }
+            { q: '我如何联系技术支持？', a: '您可以直接通过机器人中的"联系我们"按钮联系支持团队，或加入我们的Telegram频道以获取最新消息和利润更新。' }
         ]
     }
 };

@@ -1,8 +1,4 @@
-python-telegram-bot[job-queue]>=20.0
-python-dotenv==1.0.1
 python-telegram-bot==21.2
-
-Flask
-
-python-dotenv
+python-dotenv==1.0.1
+Flask==2.3.3
 pytz

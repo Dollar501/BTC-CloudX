@@ -691,6 +691,46 @@ class CouponSystem {
     }
 }
 
+// Page Navigation Class
+class PageNavigation {
+    constructor() {
+        this.currentPage = 'home-page';
+    }
+
+    init() {
+        // Show home page by default
+        this.showPage('home-page');
+    }
+
+    showPage(pageId) {
+        // Hide all pages
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => {
+            page.classList.remove('active');
+            page.style.display = 'none';
+        });
+
+        // Show selected page
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.style.display = 'block';
+            targetPage.classList.add('active');
+            this.currentPage = pageId;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            console.log(`Navigated to: ${pageId}`);
+        } else {
+            console.error(`Page not found: ${pageId}`);
+        }
+    }
+
+    getCurrentPage() {
+        return this.currentPage;
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Load saved language preference
@@ -712,22 +752,90 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize page navigation
     pageNavigation.init();
     
-    // Fix navigation button functionality for all languages (bottom nav only)
+    // Enhanced navigation button functionality with creative animation
     const navButtons = document.querySelectorAll('.nav-btn-bottom');
     navButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = button.getAttribute('data-page');
-            if (page) {
+        // Remove any existing listeners to prevent duplicates
+        button.removeEventListener('click', handleNavClick);
+        button.addEventListener('click', handleNavClick);
+    });
+    
+    function handleNavClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const button = e.currentTarget;
+        const page = button.getAttribute('data-page');
+        
+        if (page) {
+            try {
                 // Remove active class from all buttons
-                navButtons.forEach(btn => btn.classList.remove('active'));
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    // Remove any existing Bitcoin icons
+                    const existingIcon = btn.querySelector('.bitcoin-click-icon');
+                    if (existingIcon) {
+                        existingIcon.remove();
+                    }
+                });
+                
                 // Add active class to clicked button
                 button.classList.add('active');
+                
+                // Add creative Bitcoin animation
+                addBitcoinClickAnimation(button);
+                
                 // Show the page
                 pageNavigation.showPage(page);
+                
+                console.log(`Navigation clicked: ${page}`);
+            } catch (error) {
+                console.error('Navigation error:', error);
             }
-        });
-    });
+        }
+    }
+    
+    // Function to add Bitcoin click animation
+    function addBitcoinClickAnimation(button) {
+        // Create Bitcoin icon element
+        const bitcoinIcon = document.createElement('div');
+        bitcoinIcon.className = 'bitcoin-click-icon absolute top-1 right-1 w-6 h-6 bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full flex items-center justify-center shadow-lg animate-pulse';
+        bitcoinIcon.innerHTML = '<span class="text-xs font-bold text-white">₿</span>';
+        
+        // Make button relative if not already
+        button.style.position = 'relative';
+        
+        // Add the icon to the button
+        button.appendChild(bitcoinIcon);
+        
+        // Add desktop arrow animation if on desktop
+        if (window.innerWidth > 768) {
+            addDesktopArrowAnimation(button);
+        }
+        
+        // Remove the icon after animation
+        setTimeout(() => {
+            if (bitcoinIcon.parentNode) {
+                bitcoinIcon.remove();
+            }
+        }, 3000);
+    }
+    
+    // Function to add desktop arrow animation
+    function addDesktopArrowAnimation(button) {
+        const arrow = document.createElement('div');
+        arrow.className = 'desktop-arrow absolute -top-8 left-1/2 transform -translate-x-1/2 text-orange-400 text-xl animate-bounce';
+        arrow.innerHTML = '↑';
+        
+        button.appendChild(arrow);
+        
+        // Remove arrow after animation
+        setTimeout(() => {
+            if (arrow.parentNode) {
+                arrow.remove();
+            }
+        }, 2000);
+    }
     
     // Add enter platform button functionality with maintenance message
     const enterPlatformBtn = document.getElementById('enter-platform-btn');
@@ -744,26 +852,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Add back button functionality
+    // Add back button functionality with improved error handling
     const backButtons = document.querySelectorAll('.back-btn');
     backButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetPage = button.getAttribute('data-page');
-            if (targetPage) {
-                pageNavigation.showPage(targetPage);
-            }
-        });
+        button.removeEventListener('click', handleBackClick);
+        button.addEventListener('click', handleBackClick);
     });
-    console.log('🚀 BTC-CloudX Enhanced Web App Initialized!');
-});
-
-// Export for global access
-window.BitcoinAnimation = Bitcoin3DAnimation;
-window.LanguageManager = LanguageManager;
-window.currentLanguage = currentLanguage;
-
-// --- منصة التعدين Modal ---
+    
+    function handleBackClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const button = e.currentTarget;
+        const targetPage = button.getAttribute('data-page');
+        
+        if (targetPage) {
+            try {
+                pageNavigation.showPage(targetPage);
+                console.log(`Back button clicked: ${targetPage}`);
+            } catch (error) {
+                console.error('Back button error:', error);
+                // Fallback to home page
+                pageNavigation.showPage('home-page');
+            }
+        }
+    }
+    
+    // Add touch event support for better mobile responsiveness
+    function addTouchSupport() {
+        const touchElements = document.querySelectorAll('.nav-btn-bottom, .back-btn, button');
+        touchElements.forEach(element => {
+            // Add touch feedback
+            element.addEventListener('touchstart', function(e) {
+                this.style.transform = 'scale(0.95)';
+                this.style.transition = 'transform 0.1s ease';
+            });
+            
+            element.addEventListener('touchend', function(e) {
+                this.style.transform = 'scale(1)';
+            });
+            
+            element.addEventListener('touchcancel', function(e) {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    }
+    
+    // Initialize touch support
+    addTouchSupport();
+    // --- منصة التعدين Modal ---
     const openPlatformBtn = document.getElementById('open-platform-btn');
     const platformModal = document.getElementById('platform-modal');
     const closePlatformModal = document.getElementById('close-platform-modal');
@@ -784,3 +921,11 @@ window.currentLanguage = currentLanguage;
             }
         });
     }
+    
+    console.log('🚀 BTC-CloudX Enhanced Web App Initialized!');
+});
+
+// Export for global access
+window.BitcoinAnimation = Bitcoin3DAnimation;
+window.LanguageManager = LanguageManager;
+window.currentLanguage = currentLanguage;

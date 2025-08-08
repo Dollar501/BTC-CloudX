@@ -3,9 +3,11 @@ import logging
 import os
 import json
 import hashlib
+import threading
 from decimal import Decimal
 
 from dotenv import load_dotenv
+from flask import Flask, jsonify
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.ext import (
     Application, CommandHandler, MessageHandler, filters, ContextTypes,
@@ -28,6 +30,32 @@ logger = logging.getLogger(__name__)
 
 # Get Web App URL from environment variables
 WEB_APP_URL = os.getenv("WEB_APP_URL", "https://darkcyan-manatee-795600.hostingersite.com/")
+
+# Initialize Flask app for web server
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    """Health check endpoint for hosting platforms."""
+    return jsonify({
+        "status": "running",
+        "service": "BTC-CloudX Bot",
+        "message": "Bot is active and running!"
+    })
+
+@app.route('/health')
+def health():
+    """Health check endpoint."""
+    return jsonify({"status": "OK", "service": "healthy"})
+
+@app.route('/status')
+def status():
+    """Status endpoint."""
+    return jsonify({
+        "bot_status": "active",
+        "web_app_url": WEB_APP_URL,
+        "service": "BTC-CloudX Mining Platform"
+    })
 
 
 # --- Command Handlers ---
@@ -247,14 +275,26 @@ async def delete_message_handler(update: Update, context: ContextTypes.DEFAULT_T
     await query.answer()
     await query.delete_message()
 
+def run_web_server():
+    """Runs the Flask web server."""
+    port = int(os.environ.get('PORT', 5000))
+    logger.info(f"Starting web server on port {port}...")
+    app.run(host='0.0.0.0', port=port, debug=False)
+
 def main() -> None:
-    """Starts the bot."""
+    """Starts the bot and web server."""
     BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
     if not BOT_TOKEN:
         logger.error("FATAL: TELEGRAM_BOT_TOKEN not found in .env file.")
         return
     if "your-app-url.com" in WEB_APP_URL:
         logger.warning("Warning: WEB_APP_URL is not set in .env file. The Web App will not work.")
+
+    # Start web server in a separate thread
+    web_thread = threading.Thread(target=run_web_server)
+    web_thread.daemon = True
+    web_thread.start()
+    logger.info("Web server started in background thread")
 
     application = Application.builder().token(BOT_TOKEN).build()
 
