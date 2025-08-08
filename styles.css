@@ -43,10 +43,21 @@ body {
     }
 }
 .bottom-nav {
-    background-color: rgba(22, 27, 34, 0.8);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #30363d;
+    background-color: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(34, 197, 94, 0.3);
+    z-index: 1000;
 }
+
+.nav-btn-bottom {
+    min-width: 60px;
+    margin: 0 2px;
+}
+
+.nav-btn-bottom.active {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+}
+
 .nav-btn.active { color: var(--tg-theme-button-color); border-top: 2px solid var(--tg-theme-button-color); }
 .form-input, .form-select, .form-range {
     background-color: #010409;
@@ -191,6 +202,25 @@ button:hover::before, .btn:hover::before {
     border-color: var(--bitcoin-gold);
     box-shadow: 0 0 0 3px var(--bitcoin-gold-glow);
     outline: none;
+}
+
+/* Back Button Styles */
+.back-btn {
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+    transform: translateX(-2px);
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.back-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover svg {
+    transform: translateX(-2px);
 }
 
 /* Plan Cards Enhancement */

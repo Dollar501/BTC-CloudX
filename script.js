@@ -5,9 +5,9 @@ let currentLanguage = 'ar';
 
 // Language configuration
 const LANGUAGE_CONFIG = {
-    ar: { flag: '🇸🇦', name: 'العربية', dir: 'rtl' },
-    en: { flag: '🇺🇸', name: 'English', dir: 'ltr' },
-    zh: { flag: '🇨🇳', name: '中文', dir: 'ltr' }
+    ar: { code: 'AR', name: 'العربية', dir: 'rtl' },
+    en: { code: 'EN', name: 'English', dir: 'ltr' },
+    zh: { code: 'CH', name: '中文', dir: 'ltr' }
 };
 
 // Bitcoin 3D Animation Class
@@ -192,13 +192,11 @@ class LanguageManager {
         document.documentElement.dir = LANGUAGE_CONFIG[lang].dir;
         document.documentElement.lang = lang;
         
-        // Update language selector display
-        const currentLangFlag = document.getElementById('current-lang-flag');
+        // Update language display
         const currentLangText = document.getElementById('current-lang-text');
         
-        if (currentLangFlag && currentLangText) {
-            currentLangFlag.textContent = LANGUAGE_CONFIG[lang].flag;
-            currentLangText.textContent = LANGUAGE_CONFIG[lang].name;
+        if (currentLangText) {
+            currentLangText.textContent = LANGUAGE_CONFIG[lang].code;
         }
         
         // Update all translatable elements
@@ -218,13 +216,51 @@ class LanguageManager {
         if (homeTitle) homeTitle.textContent = translations.home_title;
         if (homeSubtitle) homeSubtitle.textContent = translations.home_subtitle;
         
-        // Update navigation with specific IDs
+        // Update platform elements
+        const platformElements = {
+            'platform-tagline': translations.platform_tagline,
+            'article-title': translations.article_title,
+            'article-content': translations.article_content,
+            'article-note': translations.article_note,
+            'enter-platform-text': translations.enter_platform_text
+        };
+        
+        Object.keys(platformElements).forEach(elementId => {
+            const element = document.getElementById(elementId);
+            if (element) element.textContent = platformElements[elementId];
+        });
+        
+        // Update coupon system elements
+        const couponElements = {
+            'coupon-title': translations.coupon_title,
+            'reveal-coupon-text': translations.reveal_coupon_text,
+            'coupon-code-label': translations.coupon_code_label,
+            'rewards-title': translations.rewards_title,
+            'reward-amount': translations.reward_amount,
+            'reward-condition': translations.reward_condition,
+            'countdown-label': translations.countdown_label,
+            'days-label': translations.days_label,
+            'hours-label': translations.hours_label,
+            'minutes-label': translations.minutes_label
+        };
+        
+        Object.keys(couponElements).forEach(elementId => {
+            const element = document.getElementById(elementId);
+            if (element) element.textContent = couponElements[elementId];
+        });
+        
+        // Update navigation with specific IDs (both main and bottom nav)
         const navElements = {
             'nav-home': translations.nav_home,
             'nav-plans': translations.nav_plans,
             'nav-hardware': translations.nav_hardware,
             'nav-custom-plan': translations.nav_custom_plan,
-            'nav-faq': translations.nav_faq
+            'nav-faq': translations.nav_faq,
+            'nav-home-bottom': translations.nav_home,
+            'nav-plans-bottom': translations.nav_plans,
+            'nav-hardware-bottom': translations.nav_hardware,
+            'nav-custom-plan-bottom': translations.nav_custom_plan,
+            'nav-faq-bottom': translations.nav_faq
         };
         
         Object.keys(navElements).forEach(elementId => {
@@ -247,6 +283,11 @@ class LanguageManager {
         
         // Update form labels and buttons
         this.updateFormElements();
+        
+        // Re-render dynamic content with new language
+        this.loadPlans();
+        this.loadHardware();
+        this.loadFAQ();
         
         // Reload dynamic content
         this.loadPlans();
@@ -479,28 +520,241 @@ class PageNavigation {
     }
 }
 
+// Coupon System Class
+class CouponSystem {
+    constructor() {
+        this.rewards = [
+            { amount: 10, condition: 'متاح سحبها مع استلام أرباح الشهر الثالث' },
+            { amount: 15, condition: 'متاح سحبها مع استلام أرباح الشهر الثالث' },
+            { amount: 20, condition: 'متاح سحبها مع استلام أرباح الشهر الثالث' },
+            { amount: 25, condition: 'متاح سحبها مع استلام أرباح الشهر الثالث' },
+            { amount: 30, condition: 'متاح سحبها مع استلام أرباح الشهر الثالث' },
+            { amount: 'certificate', condition: 'استلام شهادة استثمارك في يدك' }
+        ];
+        this.init();
+    }
+
+    init() {
+        const revealBtn = document.getElementById('reveal-coupon-btn');
+        if (revealBtn) {
+            revealBtn.addEventListener('click', () => this.revealCoupon());
+        }
+        
+        // Check if coupon was already revealed
+        const isRevealed = localStorage.getItem('coupon-revealed');
+        if (isRevealed) {
+            this.showCouponContent();
+            this.startCountdown();
+        }
+    }
+
+    generateUserCode() {
+        // Simulate user ID (in real app, this would come from Telegram WebApp)
+        const userId = localStorage.getItem('user-id') || this.generateUserId();
+        
+        // Use same logic as Python backend
+        const encoder = new TextEncoder();
+        const data = encoder.encode(userId);
+        
+        // Simple hash function to simulate SHA256
+        let hash = 0;
+        for (let i = 0; i < data.length; i++) {
+            const char = data[i];
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
+        }
+        
+        const uniquePart = Math.abs(hash).toString(16).substr(0, 7).toUpperCase();
+        return `BTC-X-77-${uniquePart}`;
+    }
+
+    generateUserId() {
+        const userId = Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('user-id', userId);
+        return userId;
+    }
+
+    getRandomReward() {
+        const savedReward = localStorage.getItem('user-reward');
+        if (savedReward) {
+            return JSON.parse(savedReward);
+        }
+        
+        // Use user ID to generate consistent random reward
+        const userId = localStorage.getItem('user-id') || this.generateUserId();
+        let seed = 0;
+        for (let i = 0; i < userId.length; i++) {
+            seed += userId.charCodeAt(i);
+        }
+        
+        const rewardIndex = seed % this.rewards.length;
+        const randomReward = this.rewards[rewardIndex];
+        localStorage.setItem('user-reward', JSON.stringify(randomReward));
+        return randomReward;
+    }
+
+    revealCoupon() {
+        this.showCouponContent();
+        this.startCountdown();
+        localStorage.setItem('coupon-revealed', 'true');
+        
+        // Hide reveal button
+        const revealBtn = document.getElementById('reveal-coupon-btn');
+        if (revealBtn) {
+            revealBtn.style.display = 'none';
+        }
+    }
+
+    showCouponContent() {
+        const couponContent = document.getElementById('coupon-content');
+        const userCodeElement = document.getElementById('user-coupon-code');
+        const rewardAmountElement = document.getElementById('reward-amount');
+        const rewardConditionElement = document.getElementById('reward-condition');
+        
+        if (couponContent) {
+            couponContent.classList.remove('hidden');
+        }
+        
+        if (userCodeElement) {
+            userCodeElement.textContent = this.generateUserCode();
+        }
+        
+        const reward = this.getRandomReward();
+        const currentLang = localStorage.getItem('btc-cloudx-language') || 'ar';
+        const translations = LANG_PACK[currentLang];
+        
+        if (rewardAmountElement && rewardConditionElement) {
+            if (reward.amount === 'certificate') {
+                if (currentLang === 'ar') {
+                    rewardAmountElement.textContent = 'مكافأة استلام شهادة استثمارك في يدك';
+                    rewardConditionElement.textContent = 'شهادة رقمية معتمدة';
+                } else if (currentLang === 'en') {
+                    rewardAmountElement.textContent = 'Investment Certificate Reward';
+                    rewardConditionElement.textContent = 'Certified digital certificate';
+                } else if (currentLang === 'zh') {
+                    rewardAmountElement.textContent = '投资证书奖励';
+                    rewardConditionElement.textContent = '认证数字证书';
+                }
+            } else {
+                if (currentLang === 'ar') {
+                    rewardAmountElement.textContent = `مكافأة ${reward.amount}$ أسبوعياً`;
+                    rewardConditionElement.textContent = reward.condition;
+                } else if (currentLang === 'en') {
+                    rewardAmountElement.textContent = `$${reward.amount} Weekly Reward`;
+                    rewardConditionElement.textContent = 'Available for withdrawal with third month profits';
+                } else if (currentLang === 'zh') {
+                    rewardAmountElement.textContent = `每周${reward.amount}美元奖励`;
+                    rewardConditionElement.textContent = '可在第三个月利润中提取';
+                }
+            }
+        }
+    }
+
+    startCountdown() {
+        // Get or set countdown end time (30 days from first reveal)
+        let countdownEnd = localStorage.getItem('countdown-end');
+        if (!countdownEnd) {
+            countdownEnd = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 days
+            localStorage.setItem('countdown-end', countdownEnd);
+        } else {
+            countdownEnd = parseInt(countdownEnd);
+        }
+
+        const updateCountdown = () => {
+            const now = Date.now();
+            const timeLeft = countdownEnd - now;
+
+            if (timeLeft <= 0) {
+                // Reset countdown for next month
+                const newCountdownEnd = Date.now() + (30 * 24 * 60 * 60 * 1000);
+                localStorage.setItem('countdown-end', newCountdownEnd);
+                this.startCountdown();
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            const daysElement = document.getElementById('days-count');
+            const hoursElement = document.getElementById('hours-count');
+            const minutesElement = document.getElementById('minutes-count');
+
+            if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
+            if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
+            if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
+        };
+
+        // Update immediately and then every minute
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Load saved language preference
     const savedLang = localStorage.getItem('btc-cloudx-language') || 'ar';
     
     // Initialize components
-    const bitcoinAnimation = new Bitcoin3DAnimation('bitcoin-animation');
+    const bitcoin3D = new Bitcoin3DAnimation('bitcoin-animation');
     const languageManager = new LanguageManager();
+    const buttonAnimations = new ButtonAnimations();
+    const pageNavigation = new PageNavigation();
+    const couponSystem = new CouponSystem();
     
-    // Set saved language
+    // Set initial language
     languageManager.setLanguage(savedLang);
     
-    // Initialize other components
-    ButtonAnimations.init();
-    PageNavigation.init();
+    // Initialize button animations
+    buttonAnimations.init();
     
-    // Initialize Telegram WebApp if available
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
+    // Initialize page navigation
+    pageNavigation.init();
+    
+    // Fix navigation button functionality for all languages (bottom nav only)
+    const navButtons = document.querySelectorAll('.nav-btn-bottom');
+    navButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = button.getAttribute('data-page');
+            if (page) {
+                // Remove active class from all buttons
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                // Show the page
+                pageNavigation.showPage(page);
+            }
+        });
+    });
+    
+    // Add enter platform button functionality with maintenance message
+    const enterPlatformBtn = document.getElementById('enter-platform-btn');
+    if (enterPlatformBtn) {
+        enterPlatformBtn.addEventListener('click', () => {
+            // Show maintenance message
+            const message = languageManager.getCurrentLanguage() === 'ar' ? 
+                'منصة التعدين السحابية في حاجة للمعالجة الآن حرصاً على أموالكم. نحن نعمل على تحسين الأمان والأداء لضمان أفضل تجربة استثمارية لعملائنا الكرام.\n\n💡 سيتم إشعاركم بانتهاء أعمال الصيانة قريباً' :
+                languageManager.getCurrentLanguage() === 'en' ?
+                'The cloud mining platform needs maintenance now to protect your funds. We are working on improving security and performance to ensure the best investment experience for our valued customers.\n\n💡 You will be notified when maintenance is complete soon' :
+                '云挖矿平台现在需要维护以保护您的资金。我们正在努力改善安全性和性能，以确保为我们尊贵的客户提供最佳的投资体验。\n\n💡 维护完成后我们会尽快通知您';
+            
+            alert(message);
+        });
     }
     
+    // Add back button functionality
+    const backButtons = document.querySelectorAll('.back-btn');
+    backButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetPage = button.getAttribute('data-page');
+            if (targetPage) {
+                pageNavigation.showPage(targetPage);
+            }
+        });
+    });
     console.log('🚀 BTC-CloudX Enhanced Web App Initialized!');
 });
 
@@ -508,3 +762,25 @@ document.addEventListener('DOMContentLoaded', () => {
 window.BitcoinAnimation = Bitcoin3DAnimation;
 window.LanguageManager = LanguageManager;
 window.currentLanguage = currentLanguage;
+
+// --- منصة التعدين Modal ---
+    const openPlatformBtn = document.getElementById('open-platform-btn');
+    const platformModal = document.getElementById('platform-modal');
+    const closePlatformModal = document.getElementById('close-platform-modal');
+    if (openPlatformBtn && platformModal && closePlatformModal) {
+        openPlatformBtn.addEventListener('click', () => {
+            platformModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        closePlatformModal.addEventListener('click', () => {
+            platformModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+        // إغلاق عند الضغط خارج المحتوى
+        platformModal.addEventListener('click', (e) => {
+            if (e.target === platformModal) {
+                platformModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    }

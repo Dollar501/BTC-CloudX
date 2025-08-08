@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="styles.css">
     <script src="languages.js"></script>
     <script src="script.js"></script>
-
 </head>
 <body class="antialiased">
 
@@ -20,43 +19,146 @@
             <!-- 3D Bitcoin Animation Background -->
             <div id="bitcoin-animation" class="absolute inset-0 z-0"></div>
             
-            <!-- Language Selector -->
-            <div class="absolute top-4 right-4 z-20">
+            <!-- Language Selector - Fixed Position -->
+            <div class="fixed top-4 left-4 z-50">
                 <div class="language-selector">
                     <button id="language-toggle" class="language-btn flex items-center space-x-2 bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 border border-green-500/30">
-                        <span id="current-lang-flag" class="text-lg">🇸🇦</span>
-                        <span id="current-lang-text" class="text-white font-medium">العربية</span>
+                        <span id="current-lang-text" class="text-white font-medium text-sm">AR</span>
                         <svg class="w-4 h-4 text-white transform transition-transform duration-200" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div id="language-dropdown" class="language-dropdown hidden absolute top-full right-0 mt-2 bg-black/80 backdrop-blur-md rounded-lg border border-green-500/30 overflow-hidden min-w-[150px]">
-                        <button class="lang-option w-full text-left px-4 py-3 text-white hover:bg-green-500/20 transition-colors flex items-center space-x-3" data-lang="ar">
-                            <span class="text-lg">🇸🇦</span>
-                            <span>العربية</span>
+                    <div id="language-dropdown" class="language-dropdown hidden absolute top-full left-0 mt-2 bg-black/80 backdrop-blur-md rounded-lg border border-green-500/30 overflow-hidden min-w-[80px]">
+                        <button class="lang-option w-full text-center px-4 py-3 text-white hover:bg-green-500/20 transition-colors" data-lang="ar">
+                            <span class="font-medium">AR</span>
                         </button>
-                        <button class="lang-option w-full text-left px-4 py-3 text-white hover:bg-green-500/20 transition-colors flex items-center space-x-3" data-lang="en">
-                            <span class="text-lg">🇺🇸</span>
-                            <span>English</span>
+                        <button class="lang-option w-full text-center px-4 py-3 text-white hover:bg-green-500/20 transition-colors" data-lang="en">
+                            <span class="font-medium">EN</span>
                         </button>
-                        <button class="lang-option w-full text-left px-4 py-3 text-white hover:bg-green-500/20 transition-colors flex items-center space-x-3" data-lang="zh">
-                            <span class="text-lg">🇨🇳</span>
-                            <span>中文</span>
+                        <button class="lang-option w-full text-center px-4 py-3 text-white hover:bg-green-500/20 transition-colors" data-lang="zh">
+                            <span class="font-medium">CH</span>
                         </button>
                     </div>
                 </div>
             </div>
             
-            <!-- Main Content -->
-            <div class="relative z-10 pt-16">
-                <img src="img/logo.png" alt="BTC-CloudX Logo" class="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-green-500 shadow-lg animate-pulse">
-                <h1 id="home-title" class="text-4xl font-bold text-white mb-4 drop-shadow-lg">أهلاً بك في BTC-CloudX</h1>
-                <p id="home-subtitle" class="text-lg text-gray-300 mt-2 drop-shadow-md max-w-md mx-auto">بوابتك الآمنة للاستثمار في مستقبل التعدين السحابي. ابدأ رحلتك الاستثمارية معنا اليوم.</p>
+            <!-- Platform Logo -->
+            <div class="relative z-10 mb-8">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-20 h-20 bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <span class="text-3xl font-bold text-white">₿</span>
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-4xl font-bold text-white bg-gradient-to-r from-orange-400 to-yellow-500 bg-clip-text text-transparent">
+                            BTC-CloudX
+                        </h1>
+                        <p class="text-sm text-gray-300" id="platform-tagline">منصة التعدين السحابي الرائدة</p>
+                    </div>
+                </div>
             </div>
+
+            <!-- Important Article -->
+            <div class="relative z-10 mb-8">
+                <div class="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-md rounded-xl p-6 border border-red-500/30 shadow-2xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse mr-3"></div>
+                        <h2 class="text-xl font-bold text-white" id="article-title">تحسين واجهة المستخدم</h2>
+                    </div>
+                    <p class="text-gray-200 leading-relaxed" id="article-content">
+                        منصة التعدين السحابية في حاجة للمعالجة الآن حرصاً على أموالكم. نحن نعمل على تحسين الأمان والأداء لضمان أفضل تجربة استثمارية لعملائنا الكرام.
+                    </p>
+                    <div class="mt-4 p-3 bg-yellow-500/20 rounded-lg border border-yellow-500/30">
+                        <p class="text-yellow-200 text-sm" id="article-note">
+                            💡 سيتم إشعاركم بانتهاء أعمال الصيانة قريباً
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enter Platform Button with Maintenance Message -->
+            <div class="relative z-10 mb-8">
+                <button id="enter-platform-btn" class="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-4 px-8 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center justify-center space-x-3">
+                        <span class="text-2xl">🔧</span>
+                        <div class="text-center">
+                            <div id="enter-platform-text" class="text-lg font-bold">تحسين واجهة المستخدم</div>
+                            <div class="text-sm opacity-90">منصة التعدين السحابية في حاجة للمعالجة الآن</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Coupon System -->
+            <div class="relative z-10 mb-8">
+                <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md rounded-xl p-6 border border-purple-500/30 shadow-2xl">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white font-bold">🎁</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white" id="coupon-title">كوبون المكافآت الشهرية</h3>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <button id="reveal-coupon-btn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300">
+                            <span id="reveal-coupon-text">اكشف كوبونك الآن</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Coupon Content (Hidden Initially) -->
+                    <div id="coupon-content" class="hidden">
+                        <div class="bg-black/30 rounded-lg p-4 mb-4">
+                            <p class="text-gray-300 text-sm mb-2" id="coupon-code-label">كود الاشتراك الخاص بك:</p>
+                            <div class="bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-lg p-3 border border-green-500/30">
+                                <p class="text-white font-mono text-lg font-bold" id="user-coupon-code">BTC-X-77-XXXX</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4 class="text-white font-bold mb-3" id="rewards-title">مكافأتك:</h4>
+                            <div class="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg p-4 border border-yellow-500/30">
+                                <p class="text-yellow-200 font-bold text-lg" id="reward-amount">مكافأة 15$ أسبوعياً</p>
+                                <p class="text-gray-300 text-sm mt-1" id="reward-condition">متاح سحبها مع استلام أرباح الشهر الثالث</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Countdown Timer -->
+                        <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 rounded-lg p-4 border border-green-500/30">
+                            <p class="text-white font-bold mb-2" id="countdown-label">انتهاء الكوبون خلال:</p>
+                            <div class="flex justify-center items-center space-x-4 text-2xl font-bold text-green-400">
+                                <div class="text-center">
+                                    <div id="days-count">30</div>
+                                    <div class="text-xs text-gray-400" id="days-label">يوم</div>
+                                </div>
+                                <div class="text-white">:</div>
+                                <div class="text-center">
+                                    <div id="hours-count">00</div>
+                                    <div class="text-xs text-gray-400" id="hours-label">ساعة</div>
+                                </div>
+                                <div class="text-white">:</div>
+                                <div class="text-center">
+                                    <div id="minutes-count">00</div>
+                                    <div class="text-xs text-gray-400" id="minutes-label">دقيقة</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </section>
 
         <!-- Page: Investment Plans -->
         <section id="plans-page" class="page">
+            <!-- Back Navigation -->
+            <div class="flex items-center mb-6">
+                <button class="back-btn flex items-center space-x-2 bg-black/30 backdrop-blur-md rounded-lg px-4 py-2 border border-green-500/30 text-white hover:bg-green-500/20 transition-colors" data-page="home-page">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span id="back-text">العودة</span>
+                </button>
+            </div>
             <h1 id="plans-title" class="text-3xl font-bold mb-4">📊 الخطط الاستثمارية المميزة</h1>
             <div id="plans-container" class="space-y-5">
                 <!-- Plan cards will be injected here -->
@@ -65,6 +167,15 @@
 
         <!-- Page: Our Hardware -->
         <section id="hardware-page" class="page">
+            <!-- Back Navigation -->
+            <div class="flex items-center mb-6">
+                <button class="back-btn flex items-center space-x-2 bg-black/30 backdrop-blur-md rounded-lg px-4 py-2 border border-green-500/30 text-white hover:bg-green-500/20 transition-colors" data-page="home-page">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span id="back-text">العودة</span>
+                </button>
+            </div>
             <h1 id="hardware-title" class="text-3xl font-bold mb-4">📠 أجهزتنا للتعدين</h1>
             <div id="hardware-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Hardware cards will be injected here -->
@@ -72,7 +183,16 @@
         </section>
 
         <!-- Page: Create Custom Plan -->
-        <section id="create-plan-page" class="page space-y-6">
+        <section id="custom-plan-page" class="page space-y-6">
+            <!-- Back Navigation -->
+            <div class="flex items-center mb-6">
+                <button class="back-btn flex items-center space-x-2 bg-black/30 backdrop-blur-md rounded-lg px-4 py-2 border border-green-500/30 text-white hover:bg-green-500/20 transition-colors" data-page="home-page">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span id="back-text">العودة</span>
+                </button>
+            </div>
             <h1 id="custom-plan-title" class="text-3xl font-bold">💡 صمّم خطتك الاستثمارية</h1>
             <div>
                 <label for="investment_amount" id="amount-label" class="block mb-2 text-md font-medium">1. حدد مبلغ الاستثمار (بالدولار)</label>
@@ -97,6 +217,15 @@
 
         <!-- Page: FAQ -->
         <section id="faq-page" class="page space-y-4">
+            <!-- Back Navigation -->
+            <div class="flex items-center mb-6">
+                <button class="back-btn flex items-center space-x-2 bg-black/30 backdrop-blur-md rounded-lg px-4 py-2 border border-green-500/30 text-white hover:bg-green-500/20 transition-colors" data-page="home-page">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span id="back-text">العودة</span>
+                </button>
+            </div>
             <h1 id="faq-title" class="text-3xl font-bold">❓ أسئلة شائعة</h1>
             <div id="faq-container" class="space-y-3">
                 <!-- FAQ items will be injected here -->
@@ -105,21 +234,26 @@
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-nav fixed bottom-0 left-0 right-0 flex justify-around p-2">
-        <button data-page="home-page" class="nav-btn active flex flex-col items-center w-full py-1">
-            <span class="text-2xl">🏠</span><span class="text-xs" id="nav-home">الرئيسية</span>
+    <nav class="bottom-nav fixed bottom-0 left-0 right-0 flex justify-around p-3 z-50">
+        <button data-page="home-page" class="nav-btn-bottom active bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex flex-col items-center">
+            <span class="text-xl mb-1">🏠</span>
+            <span class="text-xs" id="nav-home-bottom">الرئيسية</span>
         </button>
-        <button data-page="plans-page" class="nav-btn flex flex-col items-center w-full py-1">
-            <span class="text-2xl">📊</span><span class="text-xs" id="nav-plans">الخطط</span>
+        <button data-page="plans-page" class="nav-btn-bottom bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex flex-col items-center">
+            <span class="text-xl mb-1">📊</span>
+            <span class="text-xs" id="nav-plans-bottom">الخطط</span>
         </button>
-        <button data-page="hardware-page" class="nav-btn flex flex-col items-center w-full py-1">
-            <span class="text-2xl">📠</span><span class="text-xs" id="nav-hardware">الأجهزة</span>
+        <button data-page="hardware-page" class="nav-btn-bottom bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex flex-col items-center">
+            <span class="text-xl mb-1">📠</span>
+            <span class="text-xs" id="nav-hardware-bottom">الأجهزة</span>
         </button>
-        <button data-page="create-plan-page" class="nav-btn flex flex-col items-center w-full py-1">
-            <span class="text-2xl">💡</span><span class="text-xs" id="nav-custom-plan">خطة خاصة</span>
+        <button data-page="custom-plan-page" class="nav-btn-bottom bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex flex-col items-center">
+            <span class="text-xl mb-1">💡</span>
+            <span class="text-xs" id="nav-custom-plan-bottom">خطة خاصة</span>
         </button>
-        <button data-page="faq-page" class="nav-btn flex flex-col items-center w-full py-1">
-            <span class="text-2xl">❓</span><span class="text-xs" id="nav-faq">الأسئلة</span>
+        <button data-page="faq-page" class="nav-btn-bottom bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex flex-col items-center">
+            <span class="text-xl mb-1">❓</span>
+            <span class="text-xs" id="nav-faq-bottom">الأسئلة</span>
         </button>
     </nav>
     
@@ -143,259 +277,5 @@
       </div>
     </div>
 
-    <script src="languages.js"></script>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
-        // --- CONFIG & DATA ---
-        const TELEGRAM_SUPPORT_URL = "https://t.me/BTC_CloudX"; // Replace with your actual support username
-
-        const DATA = {
-            HARDWARE: [
-                { id: 's21xp_hydro', name: 'Antminer S21 XP Hydro', efficiency: '12.0 J/TH', image: "img/antminer_s21xp_hydro.jpg" },
-                { id: 's21xp', name: 'Antminer S21 XP', efficiency: '13.5 J/TH', image: "img/Antminer_S21_XP_270TH.jpg" },
-                { id: 'm66s', name: 'WhatsMiner M66S++', efficiency: '14.0 J/TH', image: "img/WhatsMiner_M66S++.jpg" }
-            ],
-            PLANS: [
-                { name: 'العقد الاحترافي (Pro)', price: 200, duration: 12, hashrate: 10, device: 'Antminer S21 XP', daily_profit: 0.41, annual_profit: 148.73, semi_annual_bonus: 50 },
-                { name: 'العقد المتقدم (Advanced)', price: 500, duration: 12, hashrate: 26, device: 'Antminer S21 XP', daily_profit: 1.06, annual_profit: 386.71, semi_annual_bonus: 125 },
-                { name: 'عقد النخبة المائي (Elite Hydro)', price: 1000, duration: 12, hashrate: 55, device: 'Antminer S21 XP Hydro', daily_profit: 2.41, annual_profit: 878.19, semi_annual_bonus: 250 }
-            ],
-            FAQ: [
-                { q: 'ما طبيعة عملكم؟', a: 'نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نتولى كل شيء، من الصيانة والتشغيل، وأنت تحصل على الأرباح بشكل يومي.' },
-                { q: 'كيف تُحسب الأرباح؟', a: 'تعتمد الأرباح على القوة التعدينية التي تملكها، وسعر البيتكوين الحالي، وصعوبة الشبكة. تُخصم رسوم الكهرباء والصيانة يوميًا من الناتج الإجمالي، والمتبقي هو ربحك الصافي. الاستثمار ينطوي على مخاطر تقلب الأسعار.' },
-                { q: 'هل أحصل على شهادة أو إثبات؟', a: 'نعم، عند الاشتراك في أي خطة، ستحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى مُعرّف اشتراك فريد (ID) خاص بك لمتابعة استثمارك.' },
-                { q: 'كيف يمكنني التواصل مع الدعم الفني؟', a: 'يمكنك التواصل مع فريق الدعم مباشرة عبر زر "تواصل معنا" في البوت، أو الانضمام إلى قناتنا على تليجرام لمتابعة آخر الأخبار وتحديثات الأرباح.' }
-            ]
-        };
-
-        // --- PAGE NAVIGATION LOGIC ---
-        const pages = document.querySelectorAll('.page');
-        const navButtons = document.querySelectorAll('.nav-btn');
-
-        function showPage(pageId) {
-            pages.forEach(page => page.classList.remove('active'));
-            const newPage = document.getElementById(pageId);
-            if (newPage) {
-                newPage.classList.add('active');
-            }
-            navButtons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.page === pageId) {
-                    btn.classList.add('active');
-                }
-            });
-            if (tg.HapticFeedback && tg.HapticFeedback.impactOccurred) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-        }
-
-        navButtons.forEach(button => {
-            button.addEventListener('click', () => showPage(button.dataset.page));
-        });
-
-        // --- DYNAMIC CONTENT RENDERING ---
-        function renderPlansPage() {
-            const container = document.getElementById('plans-container');
-            if (!container) return;
-            container.innerHTML = DATA.PLANS.map(plan => {
-                const planData = encodeURIComponent(JSON.stringify(plan));
-                return `
-                <div class="bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-xl border border-[#30363d] shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <h2 class="text-2xl font-bold text-green-400">${plan.name}</h2>
-                    <div class="mt-3 space-y-2 text-md">
-                        <p><strong>💰 الاستثمار:</strong> <span class="font-bold text-white">$${plan.price}</span></p>
-                        <p><strong>⚙️ القوة التعدينية:</strong> <span class="font-bold text-white">${plan.hashrate} TH/s</span></p>
-                        <p><strong>🔌 الجهاز المصدر:</strong> <span class="font-bold text-white">${plan.device}</span></p>
-                        <hr class="border-gray-600 my-2">
-                        <p><strong>📈 الربح اليومي الصافي:</strong> <span class="font-bold text-green-300">~$${plan.daily_profit.toFixed(2)}</span></p>
-                        <p><strong>📅 الربح السنوي الصافي:</strong> <span class="font-bold text-green-300">~$${plan.annual_profit.toFixed(2)}</span></p>
-                        <p><strong>🎁 عائد نصف سنوي:</strong> <span class="font-bold text-blue-300">+$${plan.semi_annual_bonus.toFixed(2)}</span></p>
-                    </div>
-                    <button onclick='showPlanConfirmationModal(JSON.parse(decodeURIComponent("${planData}")))' class="w-full mt-4 text-white p-3 rounded-lg font-bold" style="background-color: var(--tg-theme-button-color);">
-                        اشترك الآن
-                    </button>
-                </div>
-                `}).join('');
-        }
-
-
-        function renderHardwarePage() {
-            const container = document.getElementById('hardware-container');
-            if (!container) return;
-            container.innerHTML = DATA.HARDWARE.map(device => `
-                <div class="bg-[var(--tg-theme-secondary-bg-color)] p-4 rounded-xl border border-[#30363d] text-center cursor-pointer transform hover:scale-105 transition-transform duration-300" onclick="showHardwareModal('${device.id}')">
-                    <img src="${device.image}" alt="${device.name}" class="rounded-md w-full h-40 object-cover mb-3">
-                    <h2 class="text-xl font-bold">${device.name}</h2>
-                    <p class="text-gray-400">الكفاءة: ${device.efficiency}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderFaqPage() {
-            const container = document.getElementById('faq-container');
-            if (!container) return;
-            container.innerHTML = DATA.FAQ.map((item, index) => `
-                <div class="bg-[var(--tg-theme-secondary-bg-color)] rounded-lg border border-[#30363d]">
-                    <button class="accordion-toggle w-full p-4 text-right font-bold flex justify-between items-center" data-index="${index}">
-                        <span>${item.q}</span>
-                        <span class="transform transition-transform duration-300 text-xl">+</span>
-                    </button>
-                    <div class="accordion-content px-4 pb-4 text-gray-300">
-                        <p>${item.a}</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.querySelectorAll('.accordion-toggle').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const currentButton = event.currentTarget;
-                    const content = currentButton.nextElementSibling;
-                    const icon = currentButton.querySelector('span:last-child');
-                    const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
-
-                    document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
-                    document.querySelectorAll('.accordion-toggle span:last-child').forEach(i => i.style.transform = 'rotate(0deg)');
-
-                    if (!isOpen) {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                        icon.style.transform = 'rotate(45deg)';
-                    }
-                });
-            });
-        }
-
-        // --- MODAL LOGIC ---
-        const hardwareModal = document.getElementById('hardware-modal');
-        const modalBody = document.getElementById('modal-body');
-        const planModal = document.getElementById('plan-confirmation-modal');
-        const planModalBody = document.getElementById('plan-modal-body');
-        const planModalFooter = document.getElementById('plan-modal-footer');
-
-        function showHardwareModal(deviceId) {
-            const device = DATA.HARDWARE.find(d => d.id === deviceId);
-            if (!device) return;
-            
-            modalBody.innerHTML = `
-                <img src="${device.image}" alt="${device.name}" class="rounded-lg w-full mb-4">
-                <h2 class="text-2xl font-bold">${device.name}</h2>
-                <p class="text-lg text-gray-300 mt-2">كفاءة الطاقة: ${device.efficiency}</p>
-                <p class="mt-4 text-gray-400">هذا الجهاز من أفضل الأجهزة في فئته، ويستخدم في خططنا لضمان أعلى عائد ممكن للمستثمرين.</p>
-            `;
-            hardwareModal.style.display = 'flex';
-        }
-
-        function showPlanConfirmationModal(plan) {
-            planModalBody.innerHTML = `
-                <h3 class="text-xl font-bold mb-3">تأكيد الاشتراك</h3>
-                <p class="mb-4">هل تريد تأكيد الاشتراك في الخطة التالية؟</p>
-                <div class="text-right space-y-2 p-3 bg-[#010409] rounded-lg border border-gray-700">
-                    <p><strong>الخطة:</strong> ${plan.name}</p>
-                    <p><strong>السعر:</strong> $${plan.price}</p>
-                    <p><strong>القوة:</strong> ${plan.hashrate} TH/s</p>
-                    <p><strong>الربح السنوي التقديري:</strong> ~$${plan.annual_profit.toFixed(2)}</p>
-                    <p><strong>عائد نصف سنوي:</strong> +$${plan.semi_annual_bonus.toFixed(2)}</p>
-                </div>
-            `;
-
-            planModalFooter.innerHTML = `
-                <button onclick="redirectToSupport()" class="w-2/5 text-white p-2 rounded-lg font-bold bg-green-600 hover:bg-green-700">نعم، أوافق</button>
-                <button onclick="closePlanModal()" class="w-2/5 text-white p-2 rounded-lg font-bold bg-red-600 hover:bg-red-700">لا، تراجع</button>
-            `;
-
-            planModal.style.display = 'flex';
-        }
-
-        function closePlanModal() {
-            planModal.style.display = 'none';
-        }
-
-        function redirectToSupport() {
-            tg.openTelegramLink(TELEGRAM_SUPPORT_URL);
-            closePlanModal();
-        }
-
-        window.onclick = (event) => {
-            if (event.target == hardwareModal) {
-                hardwareModal.style.display = "none";
-            }
-            if (event.target == planModal) {
-                planModal.style.display = "none";
-            }
-        }
-
-        // --- CREATE CUSTOM PLAN LOGIC ---
-        const investmentAmountInput = document.getElementById('investment_amount');
-        const durationInput = document.getElementById('investment_duration');
-        const durationDisplay = document.getElementById('duration_display');
-        const calculateBtn = document.getElementById('calculate-plan-btn');
-        const resultsDiv = document.getElementById('plan-results');
-
-        durationInput.addEventListener('input', () => {
-            durationDisplay.textContent = durationInput.value;
-        });
-
-        calculateBtn.addEventListener('click', () => {
-            const amount = parseFloat(investmentAmountInput.value);
-            const durationYears = parseInt(durationInput.value);
-
-            if (isNaN(amount) || amount < 1000) {
-                tg.showAlert('الرجاء إدخال مبلغ استثمار صالح (1000 دولار كحد أدنى).');
-                return;
-            }
-
-            // Simplified calculation logic based on Elite Hydro plan for amounts >= 1000
-            const pricePerTh = 1000 / 55; // approx 18.18
-            const totalHashrate = amount / pricePerTh;
-            const netDailyProfitPerTh = 2.41 / 55; // From Elite Hydro plan
-            
-            const netDailyProfit = totalHashrate * netDailyProfitPerTh;
-            const netAnnualProfit = netDailyProfit * 365;
-            const baseProfit = netAnnualProfit * durationYears;
-            
-            // Calculate the 25% semi-annual bonus
-            const semiAnnualBonus = amount * 0.25 * durationYears * 2;
-            const totalProfit = baseProfit + semiAnnualBonus;
-
-            resultsDiv.innerHTML = `
-                <h3 class="text-xl font-bold text-center text-green-400">نتائج خطتك المخصصة</h3>
-                <p><strong>- القوة التعدينية المقدرة:</strong> ${totalHashrate.toFixed(2)} TH/s</p>
-                <p><strong>- صافي الربح اليومي المقدر:</strong> ~$${netDailyProfit.toFixed(2)}</p>
-                <hr class="border-gray-600 my-2">
-                <p><strong>- إجمالي ربح التعدين (${durationYears} سنوات):</strong> ~$${baseProfit.toFixed(2)}</p>
-                <p class="text-blue-300"><strong>- العائد الإضافي (25% كل 6 شهور):</strong> +$${semiAnnualBonus.toFixed(2)}</p>
-                <hr class="border-gray-600 my-2">
-                <p class="font-bold text-white text-xl">الإجمالي الكلي المتوقع: ~$${totalProfit.toFixed(2)}</p>
-                <p class="text-xs text-gray-400 mt-2">هذه الأرقام تقديرية وتعتمد على سعر البيتكوين الحالي وصعوبة الشبكة.</p>
-                <button id="submit-plan-btn" class="w-full mt-4 text-white p-3 rounded-lg font-bold" style="background-color: var(--tg-theme-button-color);">أرسل الخطة للبوت واطلبها</button>
-            `;
-            resultsDiv.classList.remove('hidden');
-
-            document.getElementById('submit-plan-btn').addEventListener('click', () => {
-                const dataToSend = {
-                    action: 'create_custom_plan',
-                    payload: {
-                        investment: amount,
-                        duration: durationYears,
-                        hashrate: totalHashrate.toFixed(2),
-                        totalProfit: totalProfit.toFixed(2)
-                    }
-                };
-                tg.sendData(JSON.stringify(dataToSend));
-            });
-            tg.HapticFeedback.impactOccurred('medium');
-        });
-
-        // --- INITIALIZE APP ---
-        document.addEventListener('DOMContentLoaded', () => {
-            renderPlansPage();
-            renderHardwarePage();
-            renderFaqPage();
-            showPage('home-page');
-        });
-    </script>
 </body>
 </html>

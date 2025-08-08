@@ -73,12 +73,27 @@ INVESTMENT_PLANS = [
 ]
 
 # FAQ data (Question, Answer)
-FAQ_DATA = [
-    ("ما هي طبيعة عملكم؟", "نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نحن نتولى كل شيء من صيانة وتشغيل، وأنت تحصل على الأرباح بشكل يومي."),
-    ("كيف يتم حساب الأرباح والخسائر؟", "الأرباح تعتمد على القوة التعدينية التي تملكها، سعر البيتكوين الحالي، وصعوبة الشبكة. يتم خصم رسوم الكهرباء والصيانة بشكل يومي من الناتج الخام، والباقي هو ربحك الصافي. الاستثمار يحمل مخاطر تقلب الأسعار."),
-    ("هل أحصل على شهادة أو إثبات؟", "نعم، عند الاشتراك في أي خطة، تحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى كود اشتراك فريد (ID) خاص بك لمتابعة استثمارك."),
-    ("كيف يمكنني التواصل مع الدعم؟", "يمكنك التواصل مع فريق الدعم مباشرة عبر زر \"تواصل معنا\" في البوت، أو الانضمام لقناتنا على تليجرام لمتابعة آخر الأخبار وتحديثات الأرباح.")
-]
+# Multilingual FAQ Data
+FAQ_DATA = {
+    'ar': [
+        ("ما هي طبيعة عملكم؟", "نحن شركة BTC-CloudX، نوفر لك فرصة للاستثمار في تعدين العملات الرقمية عبر شراء قوة تعدينية (Hashrate) من مزارعنا المجهزة بأحدث الأجهزة. نحن نتولى كل شيء من صيانة وتشغيل، وأنت تحصل على الأرباح بشكل يومي."),
+        ("كيف يتم حساب الأرباح والخسائر؟", "الأرباح تعتمد على القوة التعدينية التي تملكها، سعر البيتكوين الحالي، وصعوبة الشبكة. يتم خصم رسوم الكهرباء والصيانة بشكل يومي من الناتج الخام، والباقي هو ربحك الصافي. الاستثمار يحمل مخاطر تقلب الأسعار."),
+        ("هل أحصل على شهادة أو إثبات؟", "نعم، عند الاشتراك في أي خطة، تحصل على شهادة استثمار رقمية تحتوي على تفاصيل عقدك، بالإضافة إلى كود اشتراك فريد (ID) خاص بك لمتابعة استثمارك."),
+        ("كيف يمكنني التواصل مع الدعم؟", "يمكنك التواصل مع فريق الدعم مباشرة عبر زر \"تواصل معنا\" في البوت، أو الانضمام لقناتنا على تليجرام لمتابعة آخر الأخبار وتحديثات الأرباح.")
+    ],
+    'en': [
+        ("What is the nature of your work?", "We are BTC-CloudX company, providing you the opportunity to invest in cryptocurrency mining by purchasing mining power (Hashrate) from our farms equipped with the latest devices. We handle everything from maintenance and operation, and you receive profits daily."),
+        ("How are profits and losses calculated?", "Profits depend on the mining power you own, current Bitcoin price, and network difficulty. Electricity and maintenance fees are deducted daily from the gross output, and the remainder is your net profit. Investment carries price volatility risks."),
+        ("Do I get a certificate or proof?", "Yes, when subscribing to any plan, you receive a digital investment certificate containing your contract details, plus a unique subscription code (ID) for tracking your investment."),
+        ("How can I contact support?", "You can contact the support team directly via the 'Contact Us' button in the bot, or join our Telegram channels to follow the latest news and profit updates.")
+    ],
+    'zh': [
+        ("你们的工作性质是什么？", "我们是BTC-CloudX公司，为您提供通过从我们配备最新设备的矿场购买算力（Hashrate）投资加密货币挖矿的机会。我们处理从维护到运营的一切，您每天都能获得利润。"),
+        ("如何计算盈亏？", "利润取决于您拥有的算力、当前比特币价格和网络难度。电力和维护费用每天从总产出中扣除，余额就是您的净利润。投资存在价格波动风险。"),
+        ("我能获得证书或证明吗？", "是的，订阅任何计划时，您都会收到一份数字投资证书，其中包含您的合同详情，以及用于跟踪您投资的唯一订阅代码（ID）。"),
+        ("我如何联系支持？", "您可以通过机器人中的“联系我们”按钮直接联系支持团队，或加入我们的Telegram频道以获取最新消息和利润更新。")
+    ]
+}
 
 # Static informational messages with multi-language support
 STATIC_MESSAGES = {

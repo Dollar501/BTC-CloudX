@@ -121,26 +121,41 @@ async def show_featured_plans(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def show_faq_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Displays the FAQ questions as buttons."""
+    """Displays the FAQ menu with questions."""
     query = update.callback_query
     await query.answer()
     
+    # Get current language
+    current_lang = context.user_data.get('language', 'ar')
+    
+    text = get_text('faq_title', context)
     keyboard = []
-    for i, (q, a) in enumerate(FAQ_DATA):
+    
+    # Get FAQ data for current language
+    faq_data = FAQ_DATA.get(current_lang, FAQ_DATA['ar'])
+    
+    for i, (q, a) in enumerate(faq_data):
         keyboard.append([InlineKeyboardButton(q, callback_data=f"faq_{i}")])
     
     keyboard.append([InlineKeyboardButton(get_text("back_to_main_menu", context), callback_data="main_menu")])
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    await query.edit_message_text(text=get_text('faq_title', context), reply_markup=reply_markup)
+    await query.edit_message_text(text=text, reply_markup=reply_markup)
+
 
 async def show_faq_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Displays the answer to a selected FAQ."""
     query = update.callback_query
     await query.answer()
     
+    # Get current language
+    current_lang = context.user_data.get('language', 'ar')
+    
     faq_index = int(query.data.split('_')[1])
-    question, answer = FAQ_DATA[faq_index]
+    
+    # Get FAQ data for current language
+    faq_data = FAQ_DATA.get(current_lang, FAQ_DATA['ar'])
+    question, answer = faq_data[faq_index]
     
     text = f"❓ *{question}*\n\n{answer}"
     
